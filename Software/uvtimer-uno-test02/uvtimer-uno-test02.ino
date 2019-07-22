@@ -1,4 +1,5 @@
 #include <EasyButton.h>
+#include "Fsm.h"
 
 #define butInput1     4
 #define butInput2     7
@@ -7,8 +8,8 @@
 #define butInput5     6
 #define butInput6   SDA
 
-#define LED1        13
-#define LED2         5
+#define LED1Pin      13
+#define LED2Pin       5
 
 
 
@@ -51,26 +52,9 @@ void setupIRQ()
 }
 
 void setup() {
-  pinMode(LED1, OUTPUT);  // enable LED1 output
-  pinMode(LED2, OUTPUT);  // enable LED1 output
+  pinMode(LED1Pin, OUTPUT);  // enable LED1 output
+  pinMode(LED2Pin, OUTPUT);  // enable LED1 output
 
-  /*debInput1.attach(butInput1, INPUT_PULLUP);
-  debInput1.interval(DebounceInverval);
-
-  debInput2.attach(butInput2, INPUT_PULLUP);
-  debInput2.interval(DebounceInverval);
-
-  debInput3.attach(butInput3, INPUT_PULLUP);
-  debInput3.interval(DebounceInverval);
-
-  debInput4.attach(butInput4, INPUT_PULLUP);
-  debInput4.interval(DebounceInverval);
-
-  debInput5.attach(butInput5, INPUT_PULLUP);
-  debInput5.interval(DebounceInverval);
-
-  debInput6.attach(butInput6, INPUT_PULLUP);
-  debInput6.interval(DebounceInverval);*/
 
   debInput4.onPressed(onShortPressed);
   debInput4.onPressedFor(ButtonPressLongDuration, onLongPressed);
@@ -87,13 +71,18 @@ void setup() {
 }
 
 void onShortPressed() {
-  shouldBlinkShort = true;
+  if(!shouldBlinkShort)
+  {
+    shouldBlinkShort = true;
+  }
 }
 
 void onLongPressed() {
-  //shouldBlinkShort = true;
-  shouldBlinkLong = true;
-  longBlink = LongBlinkTime;
+  if(!longBlink)
+  {
+    //shouldBlinkLong = true;
+    longBlink = LongBlinkTime;
+  }
 }
 
 void loop() {
@@ -117,14 +106,14 @@ void loop() {
     shouldBlinkLong = true;
   }*/
 
-//  digitalWrite(LED1, debInput1.read());
-//  digitalWrite(LED1, debInput4.read());
+//  digitalWrite(LED1Pin, debInput1.read());
+//  digitalWrite(LED1Pin, debInput4.read());
 
   /*if(shouldBlinkLong)
   {
-    digitalWrite(LED2, true);
+    digitalWrite(LED2Pin, true);
     delay(LongBlinkTime);
-    digitalWrite(LED2, false);
+    digitalWrite(LED2Pin, false);
 
     shouldBlinkLong = false;
 
@@ -136,8 +125,8 @@ ISR(TIMER1_COMPA_vect) {
   //PORTB ^= B00100000;// toggles bit which affects pin13
   if(shouldBlinkShort)
   {
-    bool led1State = digitalRead(LED1);
-    digitalWrite(LED1, led1State ^ 1);
+    bool led1State = digitalRead(LED1Pin);
+    digitalWrite(LED1Pin, led1State ^ 1);
     if(led1State)
     {
       shouldBlinkShort = false;
@@ -146,8 +135,8 @@ ISR(TIMER1_COMPA_vect) {
 
   /*if(shouldBlinkLong)
   {
-    bool led2State = digitalRead(LED2);
-    digitalWrite(LED2, led2State ^ 1);
+    bool led2State = digitalRead(LED2Pin);
+    digitalWrite(LED2Pin, led2State ^ 1);
     if(led2State)
     {
       shouldBlinkLong = false;
@@ -156,11 +145,11 @@ ISR(TIMER1_COMPA_vect) {
 
 
 
-  if(longBlink > 0)
+  if(longBlink)
   {
-    //bool led2State = digitalRead(LED2);
-    //digitalWrite(LED2, led2State ^ 1);
-    digitalWrite(LED2, (longBlink % 2) ^ 1);
+    //bool led2State = digitalRead(LED2Pin);
+    //digitalWrite(LED2Pin, led2State ^ 1);
+    digitalWrite(LED2Pin, (longBlink % 2) ^ 1);
     /*if(led2State)
     {
       shouldBlinkLong = false;
