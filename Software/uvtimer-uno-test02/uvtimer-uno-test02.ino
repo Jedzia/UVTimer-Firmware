@@ -1,4 +1,4 @@
-#include <Bounce2.h>
+#include <EasyButton.h>
 
 #define butInput1     4
 #define butInput2     7
@@ -13,23 +13,23 @@
 
 
 // Debouncers
-const int debounceInverval = 25;
-Bounce debInput1  = Bounce();
-Bounce debInput2  = Bounce();
-Bounce debInput3  = Bounce();
-Bounce debInput4  = Bounce();
-Bounce debInput5  = Bounce();
-Bounce debInput6  = Bounce();
+const int DebounceInverval = 75;
+//EasyButton  debInput1  = EasyButton (butInput1, DebounceInverval, true, true);
+//EasyButton  debInput2  = EasyButton (butInput2, DebounceInverval, true, true);
+//EasyButton  debInput3  = EasyButton (butInput3, DebounceInverval, true, true);
+EasyButton  debInput4  = EasyButton (butInput4, DebounceInverval, true, true);
+//EasyButton  debInput5  = EasyButton (butInput5, DebounceInverval, true, true);
+//EasyButton  debInput6  = EasyButton (butInput6, DebounceInverval, true, true);
 
 // Constants
-const int ButtonPressLong = 1000;
+const int ButtonPressLongDuration = 1000;
 
-const int ShortBlinkTime = 500;
-const int LongBlinkTime = 2500;
+const int ShortBlinkTime = 3;
+const int LongBlinkTime = 11;
 
 // Variables
-int shortBlink = ShortBlinkTime;
-int longBlink = LongBlinkTime;
+volatile int shortBlink = 0;
+volatile int longBlink = 0;
 
 volatile bool shouldBlinkShort;
 volatile bool shouldBlinkLong;
@@ -54,37 +54,58 @@ void setup() {
   pinMode(LED1, OUTPUT);  // enable LED1 output
   pinMode(LED2, OUTPUT);  // enable LED1 output
 
-  debInput1.attach(butInput1, INPUT_PULLUP);
-  debInput1.interval(debounceInverval);
+  /*debInput1.attach(butInput1, INPUT_PULLUP);
+  debInput1.interval(DebounceInverval);
 
   debInput2.attach(butInput2, INPUT_PULLUP);
-  debInput2.interval(debounceInverval);
+  debInput2.interval(DebounceInverval);
 
   debInput3.attach(butInput3, INPUT_PULLUP);
-  debInput3.interval(debounceInverval);
+  debInput3.interval(DebounceInverval);
 
   debInput4.attach(butInput4, INPUT_PULLUP);
-  debInput4.interval(debounceInverval);
+  debInput4.interval(DebounceInverval);
 
   debInput5.attach(butInput5, INPUT_PULLUP);
-  debInput5.interval(debounceInverval);
+  debInput5.interval(DebounceInverval);
 
   debInput6.attach(butInput6, INPUT_PULLUP);
-  debInput6.interval(debounceInverval);
+  debInput6.interval(DebounceInverval);*/
+
+  debInput4.onPressed(onShortPressed);
+  debInput4.onPressedFor(ButtonPressLongDuration, onLongPressed);
+
+  //debInput1.begin();
+  //debInput2.begin();
+  //debInput3.begin();
+  debInput4.begin();
+  //debInput5.begin();
+  //debInput6.begin();
+
 
   setupIRQ();
 }
 
+void onShortPressed() {
+  shouldBlinkShort = true;
+}
+
+void onLongPressed() {
+  //shouldBlinkShort = true;
+  shouldBlinkLong = true;
+  longBlink = LongBlinkTime;
+}
+
 void loop() {
   // put your main code here, to run repeatedly:
-  debInput1.update();
-  debInput2.update();
-  debInput3.update();
-  debInput4.update();
-  debInput5.update();
-  debInput6.update();
+  //debInput1.read();
+  //debInput2.read();
+  //debInput3.read();
+  debInput4.read();
+  //debInput5.read();
+  //debInput6.read();
 
-  //if (debInput4.fell() && !shouldBlinkShort)
+  /*//if (debInput4.fell() && !shouldBlinkShort)
   if (debInput4.rose() && debInput4.duration() < ButtonPressLong && !shouldBlinkShort)
   {
     shouldBlinkShort = true;
@@ -94,7 +115,7 @@ void loop() {
   if (debInput4.duration() > ButtonPressLong && debInput4.rose() && !shouldBlinkLong)
   {
     shouldBlinkLong = true;
-  }
+  }*/
 
 //  digitalWrite(LED1, debInput1.read());
 //  digitalWrite(LED1, debInput4.read());
@@ -123,7 +144,7 @@ ISR(TIMER1_COMPA_vect) {
     }
   }
 
-  if(shouldBlinkLong)
+  /*if(shouldBlinkLong)
   {
     bool led2State = digitalRead(LED2);
     digitalWrite(LED2, led2State ^ 1);
@@ -131,6 +152,21 @@ ISR(TIMER1_COMPA_vect) {
     {
       shouldBlinkLong = false;
     }
+  }*/
+
+
+
+  if(longBlink > 0)
+  {
+    //bool led2State = digitalRead(LED2);
+    //digitalWrite(LED2, led2State ^ 1);
+    digitalWrite(LED2, (longBlink % 2) ^ 1);
+    /*if(led2State)
+    {
+      shouldBlinkLong = false;
+    }*/
+    longBlink--;
   }
+
    
 }
