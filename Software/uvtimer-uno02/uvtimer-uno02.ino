@@ -1,31 +1,10 @@
-#include <Fsm.h>
-#include <EasyButton.h>
-
-#define butInput1     4
-#define butInput2     7
-#define butInput3     8
-#define butInput4    12
-#define butInput5     6
-#define butInput6   SDA
-
-#define LED1Pin      13
-#define LED2Pin       5
-
-
-
-// Debouncers
-const int DebounceInverval = 75;
-//EasyButton  debInput1  = EasyButton (butInput1, DebounceInverval, true, true);
-//EasyButton  debInput2  = EasyButton (butInput2, DebounceInverval, true, true);
-//EasyButton  debInput3  = EasyButton (butInput3, DebounceInverval, true, true);
-EasyButton  debInput4  = EasyButton (butInput4, DebounceInverval, true, true);
-//EasyButton  debInput5  = EasyButton (butInput5, DebounceInverval, true, true);
-//EasyButton  debInput6  = EasyButton (butInput6, DebounceInverval, true, true);
+#include "io.h"
+#include "states.h"
 
 // Constants
 const int ButtonPressLongDuration = 1000;
 
-const int ShortBlinkTime = 3;
+const int ShortBlinkTime = 7;
 const int LongBlinkTime = 32;
 
 // Variables
@@ -34,44 +13,6 @@ volatile int longBlink = 0;
 
 volatile bool shouldBlinkShort;
 volatile bool shouldBlinkLong;
-
-
-//Events
-#define BUTTON_EVENT  0
-
-int buttonState = 0;
-
-/* state 1:  led off
- * state 2:  led on
- * transition from s1 to s2 on button press
- * transition back from s2 to s1 after 3 seconds or button press
- */
-State state_led_off(&led_off, &check_button, NULL);
-State state_led_on(&led_on, &check_button, NULL);
-Fsm fsm(&state_led_off);
-
-// Transition functions
-void led_off()
-{
-  //Serial.println("led_off");
-  //digitalWrite(LED_PIN, LOW);
-}
-
-void led_on()
-{
-  //Serial.println("led_on");
-  //digitalWrite(LED_PIN, HIGH);
-}
-
-void check_button()
-{
-  int buttonState = digitalRead(butInput2);
-  if (buttonState == LOW) {
-    //Serial.println("button_pressed");
-    fsm.trigger(BUTTON_EVENT);
-  }
-}
-
 
 void setupIRQ()
 {
@@ -109,9 +50,11 @@ void setup() {
 }
 
 void onShortPressed() {
-  if(!shouldBlinkShort)
+  if(!shortBlink)
+  //if(!shouldBlinkShort)
   {
-    shouldBlinkShort = true;
+    //shouldBlinkShort = true;
+    shortBlink = ShortBlinkTime;
   }
 }
 
@@ -181,6 +124,18 @@ ISR(TIMER1_COMPA_vect) {
     }
   }*/
 
+  if(shortBlink)
+  {
+    //bool led2State = digitalRead(LED2Pin);
+    //digitalWrite(LED2Pin, led2State ^ 1);
+    //digitalWrite(LED2Pin, !((shortBlink % 4) <= 2));
+    digitalWrite(LED2Pin, !((shortBlink % 2) ));
+    /*if(led2State)
+    {
+      shouldBlinkLong = false;
+    }*/
+    shortBlink--;
+  }
 
 
   if(longBlink)
