@@ -1,0 +1,66 @@
+* SpiceNetList
+* 
+* Exported from Simulated03.sch at 24.01.2020 16:24
+* 
+* EAGLE Version 9.5.2 Copyright (c) 1988-2019 Autodesk, Inc.
+* 
+.TEMP=25.000000
+* --------- .OPTIONS ---------
+* --------- .PARAMS ---------
+.PARAM RATIO=1/10
+
+* --------- devices ---------
+X_X1 VIN 0 VOUT 0 XFORMER 
+V_VCUR_1 VGL GNDGL DC 0V AC 0 
+R_R2 GNDGL2 GNDGL 10 
+D_D3 GNDGL2 N_4 DMOD 
+D_D1 N_4 VGL DMOD 
+V_V1 N_2 0 DC 0V AC 240V SIN(0 240 50hz 0 0) 
+R_R1 N_2 VIN 0.1 
+D_D4 GNDGL2 VOUT DMOD 
+D_D2 VOUT VGL DMOD 
+R_R3 0 N_4 10 
+
+* --------- models ---------
+
+* (model found in library)
+
+**********************
+* Autodesk EAGLE - Spice Model File
+* transformer subcircuit, requires RATIO parameter defined
+* Date: 10/1/17
+**********************
+.SUBCKT XFORMER 1 2 3 4
+E 5 4 1 2 {RATIO}
+F 1 2 VM {RATIO}
+VM 5 6
+RP 1 2 1MEG
+RS 6 3 1U
+.ENDS XFORMER
+
+
+* (model found in library)
+
+**********************
+* Autodesk EAGLE - Spice Model File
+* Date: 9/17/17
+* basic diode intrinsic model
+**********************
+.MODEL DMOD D
+
+
+* --------- simulation ---------
+.print DC V(VOUT) V(VIN) V(GNDGL) V(VGL) V(GNDGL2) I(V_V1) I(V_VCUR_1)
+.print AC V(VOUT) V(VIN) V(GNDGL) V(VGL) V(GNDGL2) I(V_V1) I(V_VCUR_1)
+.print TRAN V(VOUT) V(VIN) V(GNDGL) V(VGL) V(GNDGL2) I(V_V1) I(V_VCUR_1)
+.END
+
+
+
+
+
+
+
+
+
+

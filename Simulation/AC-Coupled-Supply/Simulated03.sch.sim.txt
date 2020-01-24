@@ -1,0 +1,31 @@
+Warning: v.x_x1.vm: has no value, DC 0 assumed
+
+Circuit: * spicenetlist
+
+Doing analysis at TEMP = 0.000000 and TNOM = 27.000000
+
+
+Initial Transient Solution
+--------------------------
+
+Node                                   Voltage
+----                                   -------
+x_x1.5                           -6.16361e-042
+vin                              -6.16361e-041
+x_x1.6                           -6.16361e-042
+vout                             -6.16977e-042
+vgl                               1.14567e-021
+gndgl                             1.14567e-021
+gndgl2                            1.14567e-021
+n_4                              -6.16325e-038
+n_2                                          0
+v.x_x1.vm#branch                  6.16361e-039
+e.x_x1.e#branch                  -6.16361e-039
+v_v1#branch                      -6.16361e-040
+v_vcur_1#branch                  -1.69733e-032
+
+
+No. of Data Rows : 501
+ASCII raw file
+
+Note: No ".plot", ".print", or ".fourier" lines; no simulations run
