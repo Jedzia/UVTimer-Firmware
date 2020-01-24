@@ -1,0 +1,30 @@
+* SpiceNetList
+* 
+* Exported from Simulated02.sch at 24.01.2020 11:06
+* 
+* EAGLE Version 9.3.2 Copyright (c) 1988-2019 Autodesk, Inc.
+* 
+.TEMP=25.000000
+* --------- .OPTIONS ---------
+* --------- .PARAMS ---------
+
+* --------- devices ---------
+V_V1 VIN 0 DC 0V AC 240V 
+C_C1 VCAP1 0 100n 
+R_R1 VIN VCAP1 1k 
+
+* --------- simulation ---------
+.print DC V(VCAP1) Vp(VCAP1) I(V_V1)
+.print AC V(VCAP1) Vp(VCAP1) I(V_V1)
+.print TRAN V(VCAP1) Vp(VCAP1) I(V_V1)
+.END
+
+
+
+
+
+
+
+
+
+

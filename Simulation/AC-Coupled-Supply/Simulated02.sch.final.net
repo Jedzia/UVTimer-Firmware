@@ -1,6 +1,6 @@
 * SpiceNetList
 * 
-* Exported from Simulated01.sch at 24.01.2020 10:59
+* Exported from Simulated02.sch at 24.01.2020 11:06
 * 
 * EAGLE Version 9.3.2 Copyright (c) 1988-2019 Autodesk, Inc.
 * 
@@ -12,19 +12,15 @@
 * --------- .PARAMS ---------
 
 * --------- devices ---------
-R_R2 VCAP1 VCAP2 1k 
-V_V1 VIN 0 DC 0V AC 1V 
-R_R3 VCAP2 VOUT 1k 
-C_C2 VCAP2 0 1n 
+V_V1 VIN 0 DC 0V AC 240V 
 C_C1 VCAP1 0 100n 
 R_R1 VIN VCAP1 1k 
-C_C3 VOUT 0 10p 
 
 * --------- simulation ---------
 .control
 set filetype=ascii
-OP
-write Simulated01.sch.sim
+DC V_V1 120 240 0.24 
+write Simulated02.sch.sim V(VCAP1)  I(V_V1)
 .endc
 
 
