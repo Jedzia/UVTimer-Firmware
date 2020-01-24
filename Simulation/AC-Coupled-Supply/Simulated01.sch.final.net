@@ -1,0 +1,42 @@
+* SpiceNetList
+* 
+* Exported from Simulated01.sch at 24.01.2020 10:59
+* 
+* EAGLE Version 9.3.2 Copyright (c) 1988-2019 Autodesk, Inc.
+* 
+.TEMP=25.0
+
+* --------- .OPTIONS ---------
+.OPTIONS ABSTOL=1e-12 GMIN=1e-12 PIVREL=1e-3 ITL1=100 ITL2=50 PIVTOL=1e-13 RELTOL=1e-3 VNTOL=1e-6 CHGTOL=1e-15 ITL4=10 METHOD=TRAP SRCSTEPS=0 TRTOL=7 NODE
+
+* --------- .PARAMS ---------
+
+* --------- devices ---------
+R_R2 VCAP1 VCAP2 1k 
+V_V1 VIN 0 DC 0V AC 1V 
+R_R3 VCAP2 VOUT 1k 
+C_C2 VCAP2 0 1n 
+C_C1 VCAP1 0 100n 
+R_R1 VIN VCAP1 1k 
+C_C3 VOUT 0 10p 
+
+* --------- simulation ---------
+.control
+set filetype=ascii
+OP
+write Simulated01.sch.sim
+.endc
+
+
+
+.END
+
+
+
+
+
+
+
+
+
+
