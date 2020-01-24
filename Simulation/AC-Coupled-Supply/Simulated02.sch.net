@@ -1,22 +1,36 @@
 * SpiceNetList
 * 
-* Exported from Simulated02.sch at 24.01.2020 11:06
+* Exported from Simulated02.sch at 24.01.2020 16:05
 * 
-* EAGLE Version 9.3.2 Copyright (c) 1988-2019 Autodesk, Inc.
+* EAGLE Version 9.5.2 Copyright (c) 1988-2019 Autodesk, Inc.
 * 
 .TEMP=25.000000
 * --------- .OPTIONS ---------
 * --------- .PARAMS ---------
 
 * --------- devices ---------
-V_V1 VIN 0 DC 0V AC 240V 
-C_C1 VCAP1 0 100n 
+R_R2 0 OUT 100k 
 R_R1 VIN VCAP1 1k 
+C_C1 VCAP1 0 100n 
+D_D1 VCAP1 OUT DMOD 
+V_V1 VIN 0 DC 0V AC 240V 
+
+* --------- models ---------
+
+* (model found in library)
+
+**********************
+* Autodesk EAGLE - Spice Model File
+* Date: 9/17/17
+* basic diode intrinsic model
+**********************
+.MODEL DMOD D
+
 
 * --------- simulation ---------
-.print DC V(VCAP1) Vp(VCAP1) I(V_V1)
-.print AC V(VCAP1) Vp(VCAP1) I(V_V1)
-.print TRAN V(VCAP1) Vp(VCAP1) I(V_V1)
+.print DC V(VCAP1) Vp(VCAP1) V(OUT) I(V_V1)
+.print AC V(VCAP1) Vp(VCAP1) V(OUT) I(V_V1)
+.print TRAN V(VCAP1) Vp(VCAP1) V(OUT) I(V_V1)
 .END
 
 

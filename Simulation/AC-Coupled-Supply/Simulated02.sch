@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="9.3.2">
+<eagle version="9.5.2">
 <drawing>
 <settings>
 <setting alwaysvectorfont="no"/>
@@ -984,6 +984,56 @@ EXXXXXXX N+ N- NC+ NC- VALUE
 </deviceset>
 </devicesets>
 </library>
+<library name="ngspice-simulation" urn="urn:adsk.eagle:library:527439">
+<description>SPICE compatible library parts</description>
+<packages>
+</packages>
+<symbols>
+<symbol name="DIODE" urn="urn:adsk.eagle:symbol:527450/4" library_version="18">
+<description>Diode</description>
+<pin name="A" x="-5.08" y="0" visible="off" length="short" direction="pas" swaplevel="1"/>
+<pin name="C" x="5.08" y="0" visible="off" length="short" direction="pas" swaplevel="1" rot="R180"/>
+<text x="-5.08" y="-5.08" size="1.778" layer="97">&gt;SPICEMODEL</text>
+<text x="-5.08" y="-7.62" size="1.778" layer="97">&gt;SPICEEXTRA</text>
+<text x="-5.08" y="3.81" size="1.778" layer="95">&gt;NAME</text>
+<text x="-5.08" y="-10.16" size="1.778" layer="96">&gt;VALUE</text>
+<wire x1="-2.54" y1="-2.54" x2="-2.54" y2="2.54" width="0.254" layer="94"/>
+<wire x1="-2.54" y1="2.54" x2="2.54" y2="0" width="0.254" layer="94"/>
+<wire x1="2.54" y1="0" x2="-2.54" y2="-2.54" width="0.254" layer="94"/>
+<wire x1="2.54" y1="2.54" x2="2.54" y2="-2.54" width="0.254" layer="94"/>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="DIODE" urn="urn:adsk.eagle:component:527471/11" prefix="D" library_version="18">
+<description>Diode</description>
+<gates>
+<gate name="G$1" symbol="DIODE" x="0" y="0"/>
+</gates>
+<devices>
+<device name="">
+<technologies>
+<technology name="">
+<attribute name="_EXTERNAL_" value="" constant="no"/>
+</technology>
+</technologies>
+</device>
+</devices>
+<spice>
+<pinmapping spiceprefix="D">
+<pinmap gate="G$1" pin="A" pinorder="1"/>
+<pinmap gate="G$1" pin="C" pinorder="2"/>
+</pinmapping>
+<model name="DMOD">
+**********************
+* Autodesk EAGLE - Spice Model File
+* Date: 9/17/17
+* basic diode intrinsic model
+**********************
+.MODEL DMOD D</model>
+</spice>
+</deviceset>
+</devicesets>
+</library>
 </libraries>
 <attributes>
 </attributes>
@@ -998,6 +1048,8 @@ EXXXXXXX N+ N- NC+ NC- VALUE
 <part name="R1" library="ngspice-simulation" library_urn="urn:adsk.eagle:library:5272020" deviceset="R" device="" value="1k"/>
 <part name="V4" library="ngspice-simulation" library_urn="urn:adsk.eagle:library:5272020" deviceset="GND" device=""/>
 <part name="V1" library="ngspice-simulation" library_urn="urn:adsk.eagle:library:5272020" deviceset="VOLTAGE" device="" value="DC 0V AC 240V"/>
+<part name="D1" library="ngspice-simulation" library_urn="urn:adsk.eagle:library:527439" deviceset="DIODE" device=""/>
+<part name="R2" library="ngspice-simulation" library_urn="urn:adsk.eagle:library:5272020" deviceset="R" device="" value="100k"/>
 </parts>
 <sheets>
 <sheet>
@@ -1023,6 +1075,14 @@ Source has DC, TRAN and AC values</text>
 <attribute name="NAME" x="15.24" y="27.94" size="1.778" layer="95"/>
 <attribute name="VALUE" x="15.24" y="25.4" size="1.778" layer="96"/>
 </instance>
+<instance part="D1" gate="G$1" x="68.58" y="40.64" smashed="yes">
+<attribute name="NAME" x="63.5" y="44.45" size="1.778" layer="95"/>
+<attribute name="VALUE" x="63.5" y="30.48" size="1.778" layer="96"/>
+</instance>
+<instance part="R2" gate="G$1" x="86.36" y="25.4" smashed="yes" rot="R90">
+<attribute name="NAME" x="83.82" y="22.86" size="1.778" layer="95" rot="R90"/>
+<attribute name="VALUE" x="90.17" y="22.86" size="1.778" layer="96" rot="R90"/>
+</instance>
 </instances>
 <busses>
 </busses>
@@ -1032,13 +1092,14 @@ Source has DC, TRAN and AC values</text>
 <wire x1="43.18" y1="40.64" x2="43.18" y2="27.94" width="0.1524" layer="91"/>
 <label x="40.64" y="40.64" size="1.778" layer="95"/>
 <wire x1="35.56" y1="40.64" x2="43.18" y2="40.64" width="0.1524" layer="91"/>
-<wire x1="50.8" y1="40.64" x2="43.18" y2="40.64" width="0.1524" layer="91"/>
 <junction x="43.18" y="40.64"/>
 <pinref part="R1" gate="G$1" pin="2"/>
 <pinref part="C1" gate="G$1" pin="1"/>
 <probe x="40.64" y="50.8" size="1.778" layer="89" probetype="0"/>
 <probe x="40.64" y="48.26" size="1.778" layer="89" probetype="1"/>
-<probe x="60.96" y="45.72" size="1.778" layer="89" probetype="0"/>
+<probe x="55.88" y="53.34" size="1.778" layer="89" probetype="0"/>
+<pinref part="D1" gate="G$1" pin="A"/>
+<wire x1="43.18" y1="40.64" x2="63.5" y2="40.64" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="VIN" class="0">
@@ -1060,6 +1121,9 @@ Source has DC, TRAN and AC values</text>
 <pinref part="C1" gate="G$1" pin="2"/>
 <pinref part="V4" gate="G$1" pin="0"/>
 <pinref part="V1" gate="G$1" pin="-"/>
+<pinref part="R2" gate="G$1" pin="1"/>
+<wire x1="43.18" y1="12.7" x2="86.36" y2="12.7" width="0.1524" layer="91"/>
+<wire x1="86.36" y1="12.7" x2="86.36" y2="20.32" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$1" class="0">
@@ -1068,6 +1132,15 @@ Source has DC, TRAN and AC values</text>
 <wire x1="109.22" y1="73.66" x2="109.22" y2="0" width="0.1524" layer="91"/>
 <wire x1="109.22" y1="0" x2="0" y2="0" width="0.1524" layer="91"/>
 <wire x1="0" y1="0" x2="0" y2="73.66" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="OUT" class="0">
+<segment>
+<pinref part="R2" gate="G$1" pin="2"/>
+<wire x1="86.36" y1="30.48" x2="86.36" y2="40.64" width="0.1524" layer="91"/>
+<pinref part="D1" gate="G$1" pin="C"/>
+<wire x1="86.36" y1="40.64" x2="73.66" y2="40.64" width="0.1524" layer="91"/>
+<probe x="91.44" y="48.26" size="1.778" layer="89" probetype="0"/>
 </segment>
 </net>
 </nets>

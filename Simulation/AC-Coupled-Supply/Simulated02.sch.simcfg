@@ -27,7 +27,7 @@
         "trtol": "7",
         "vntol": "1e-6"
     },
-    "simulation type": "DC",
+    "simulation type": "AC",
     "temperature": 25,
     "tran parameters": {
         "tran start value": "1",
