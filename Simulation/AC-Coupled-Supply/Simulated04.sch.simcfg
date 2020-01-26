@@ -6,7 +6,7 @@
     },
     "dc parameters": {
         "dc end value": "4",
-        "dc source": "V_V1",
+        "dc source": "V_VCUR_2",
         "dc start value": "2"
     },
     "settings": {
@@ -16,9 +16,9 @@
         "itl1": "100",
         "itl2": "50",
         "itl4": "10",
-        "max limit": "20000",
+        "max limit": "2000",
         "method": "TRAP",
-        "numpoints": "200",
+        "numpoints": "100",
         "pivrel": "1e-3",
         "pivtol": "1e-13",
         "reltol": "1e-3",
@@ -32,6 +32,6 @@
     "tran parameters": {
         "tran start value": "0ms",
         "tran stop value": "60ms",
-        "tran tmax": "0.0003"
+        "tran tmax": "0.0006"
     }
 }

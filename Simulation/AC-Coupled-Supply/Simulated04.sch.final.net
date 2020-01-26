@@ -1,0 +1,144 @@
+* SpiceNetList
+* 
+* Exported from Simulated04.sch at 26.01.2020 23:03
+* 
+* EAGLE Version 9.5.2 Copyright (c) 1988-2019 Autodesk, Inc.
+* 
+.TEMP=25.0
+
+* --------- .OPTIONS ---------
+.OPTIONS ABSTOL=1e-12 GMIN=1e-12 PIVREL=1e-3 ITL1=100 ITL2=50 PIVTOL=1e-13 RELTOL=1e-3 VNTOL=1e-6 CHGTOL=1e-15 ITL4=10 METHOD=TRAP SRCSTEPS=0 TRTOL=7 NODE
+
+* --------- .PARAMS ---------
+.PARAM RATIO=1/10
+
+* --------- devices ---------
+D_D3 0 VIN-N DMOD 
+R_R1 N_2 VIN-L 0.01 
+R_R4 0 V_LIN 1k 
+C_C4 V_LIN 0 100n 
+V_I_LOAD VREG VOUT 
+V_VCUR_1 N_4 N_3 DC 0V AC 0 
+D_D4 0 N_3 DMOD 
+V_V1 N_2 VIN-N DC 0V AC 340V SIN(0 340 50hz 0 0) 
+D_D1 VIN-N VGL DMOD 
+D_D6 VPREREG VREG DMOD 
+C_C2 VREG 0 100n 
+R_R2 N_1 VGL 220 
+C_C3 VREG 0 47u 
+D_D2 N_3 VGL DMOD 
+R_R3 0 VOUT 100k 
+X_D5 0 VPREREG DI_BZT52C9V1LP 
+V_VCUR_2 N_1 VPREREG 
+C_C1 VIN-L N_4 .39u 
+X_IC1 VOUT 0 V_LIN LM7805 
+
+* --------- models ---------
+
+* (model found in library)
+
+**********************
+* Autodesk EAGLE - Spice Model File
+* Date: 9/17/17
+* basic diode intrinsic model
+**********************
+.MODEL DMOD D
+
+
+* model file: E:/Projects/Elektronik/Arduino/ATtiny/UVTimer/Simulation/AC-Coupled-Supply/DI_BZT52C9V1LP.mdl
+*SRC=BZT52C9V1LP;DI_BZT52C9V1LP;Diodes;Zener <=10V; 9.10V  0.250W   Diodes Inc. QFN Zener
+*SYM=HZEN
+.SUBCKT DI_BZT52C9V1LP  1 2
+*        Terminals    A   K
+D1 1 2 DF
+DZ 3 1 DR
+VZ 2 3 7.44
+.MODEL DF D ( IS=11.3p RS=31.3 N=1.10
++ CJO=50.3p VJ=0.750 M=0.330 TT=50.1n )
+.MODEL DR D ( IS=2.26f RS=3.45 N=2.23 )
+.ENDS
+
+
+* model file: E:/Projects/Elektronik/Arduino/ATtiny/UVTimer/Simulation/AC-Coupled-Supply/LM7805.mdl
+* LM7805 model. 
+* No need to use .inc - I've set the .asy symbol to remove the need for .inc.
+* (I used the symbol of LT1084, just replaced the LT1084 by LMxxxx and LTC.LIB by regulators.lib) 
+.SUBCKT LM7805  1    2    3
+* In GND Out
+QT6          23  10  2   Q_NPN 0.1
+QT7          5   4   10  Q_NPN 0.1
+QT5          7   6   5   Q_NPN 0.1
+QT1          1   9   8   Q_NPN 0.1
+QT3          11  8   7   Q_NPN 0.1
+QT2          11  13  12  Q_NPN 0.1
+QT17         1   15  14  Q_NPN 10
+C2           10  23      4P
+R16          12  5       500
+R12          16  2       12.1K
+QT18         17  23  16  Q_NPN 0.1
+D1           18  19  	 D_D 
+R11          20  21      850
+R5           22  3       100
+QT14         24  18  2   Q_NPN 0.1
+R21          6   2       2.67K
+R20          3   6       640
+DZ2          25  26      D_5V1 
+R19          1   26      16K
+R18          14  3       250M
+R17          25  14      380
+R15          25  15      1.62K
+QT16         1   20  15  Q_NPN 1
+QT15         2   24  21  Q_PNP 0.1
+*OFF
+R14          21  24      4K
+C1           27  24      20P
+R13          19  2       4K
+QT13         24  27  18  Q_NPN 0.1
+QT12         20  25  22  Q_NPN 1 
+*OFF
+QT11         20  28  2   Q_NPN 0.1
+*OFF
+QT10         20  11  1   Q_PNP 0.1
+R10          17  27      16.5K
+R9           5   4       1.9K
+R8           4   23      26
+R7           10  2       1.2K
+R6           29  2       1K
+QT9          11  11  1   Q_PNP 0.1
+QT8          27  16  29  Q_NPN 0.1
+QT4          15  6   17  Q_NPN 0.1
+DZ1          2   9       D_5V6
+R4           1   9       80K
+R3           28  2       830
+R2           13  28      4.97K
+R1           8   13      7K
+.MODEL D_5V1 D( IS=10F N=1.16 BV=5.1 IBV=0.5M CJ0 = 1P TT = 10p )
+.MODEL D_5V6 D( IS=10F N=1.16 BV=5.6 IBV=5U CJ0 = 1P TT = 10p )
+.MODEL Q_NPN NPN( IS=10F NF=1.16 NR=1.16 BF=80 CJC=1P CJE=2P  
++       TF=10P TR=1N )
+.MODEL Q_PNP PNP( IS=10F NF=1.16 NR=1.16 BF=80 CJC=1P CJE=2P  
++      TF=10P TR=1N )
+.MODEL D_D D( IS=1F N=1.16 CJ0 = 1P TT = 10p )
+.ENDS LM7805
+
+
+* --------- simulation ---------
+
+
+.control
+set filetype=ascii
+TRAN 0.0006 0.06 0 0.0006 
+write Simulated04.sch.sim V(VGL) V(VPREREG) V(VOUT) V(V_LIN) I(V_VCUR_1) I(V_I_LOAD) I(V_V1) I(V_VCUR_2)
+.endc
+
+.END
+
+
+
+
+
+
+
+
+
+
