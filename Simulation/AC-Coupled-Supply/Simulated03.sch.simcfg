@@ -16,9 +16,9 @@
         "itl1": "100",
         "itl2": "50",
         "itl4": "10",
-        "max limit": "2000",
+        "max limit": "20000",
         "method": "TRAP",
-        "numpoints": "500",
+        "numpoints": "600",
         "pivrel": "1e-3",
         "pivtol": "1e-13",
         "reltol": "1e-3",
@@ -30,8 +30,8 @@
     "simulation type": "TRAN",
     "temperature": 25,
     "tran parameters": {
-        "tran start value": "20ms",
+        "tran start value": "0ms",
         "tran stop value": "60ms",
-        "tran tmax": "8e-5"
+        "tran tmax": "0.0001"
     }
 }

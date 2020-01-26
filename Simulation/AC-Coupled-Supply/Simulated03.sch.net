@@ -1,6 +1,6 @@
 * SpiceNetList
 * 
-* Exported from Simulated03.sch at 24.01.2020 16:24
+* Exported from Simulated03.sch at 26.01.2020 22:11
 * 
 * EAGLE Version 9.5.2 Copyright (c) 1988-2019 Autodesk, Inc.
 * 
@@ -10,34 +10,22 @@
 .PARAM RATIO=1/10
 
 * --------- devices ---------
-X_X1 VIN 0 VOUT 0 XFORMER 
-V_VCUR_1 VGL GNDGL DC 0V AC 0 
-R_R2 GNDGL2 GNDGL 10 
-D_D3 GNDGL2 N_4 DMOD 
-D_D1 N_4 VGL DMOD 
-V_V1 N_2 0 DC 0V AC 240V SIN(0 240 50hz 0 0) 
-R_R1 N_2 VIN 0.1 
-D_D4 GNDGL2 VOUT DMOD 
-D_D2 VOUT VGL DMOD 
-R_R3 0 N_4 10 
+R_R1 N_2 VIN-L 0.01 
+D_D1 VIN-N VGL DMOD 
+D_D4 0 N_3 DMOD 
+D_D6 VPREREG VREG DMOD 
+C_C2 VREG 0 10u 
+C_C1 VIN-L N_4 1u 
+V_V1 N_2 VIN-N DC 0V AC 340V SIN(0 340 50hz 0 0) 
+R_R2 N_1 VGL 47 
+D_D3 0 VIN-N DMOD 
+R_R3 0 VREG 1k 
+V_VCUR_2 N_1 VPREREG 
+V_VCUR_1 N_4 N_3 DC 0V AC 0 
+D_D2 N_3 VGL DMOD 
+X_D5 0 VPREREG DI_BZT52C9V1LP 
 
 * --------- models ---------
-
-* (model found in library)
-
-**********************
-* Autodesk EAGLE - Spice Model File
-* transformer subcircuit, requires RATIO parameter defined
-* Date: 10/1/17
-**********************
-.SUBCKT XFORMER 1 2 3 4
-E 5 4 1 2 {RATIO}
-F 1 2 VM {RATIO}
-VM 5 6
-RP 1 2 1MEG
-RS 6 3 1U
-.ENDS XFORMER
-
 
 * (model found in library)
 
@@ -49,10 +37,24 @@ RS 6 3 1U
 .MODEL DMOD D
 
 
+* model file: E:/Projects/Elektronik/Arduino/ATtiny/UVTimer/Simulation/AC-Coupled-Supply/DI_BZT52C9V1LP.mdl
+*SRC=BZT52C9V1LP;DI_BZT52C9V1LP;Diodes;Zener <=10V; 9.10V  0.250W   Diodes Inc. QFN Zener
+*SYM=HZEN
+.SUBCKT DI_BZT52C9V1LP  1 2
+*        Terminals    A   K
+D1 1 2 DF
+DZ 3 1 DR
+VZ 2 3 7.44
+.MODEL DF D ( IS=11.3p RS=31.3 N=1.10
++ CJO=50.3p VJ=0.750 M=0.330 TT=50.1n )
+.MODEL DR D ( IS=2.26f RS=3.45 N=2.23 )
+.ENDS
+
+
 * --------- simulation ---------
-.print DC V(VOUT) V(VIN) V(GNDGL) V(VGL) V(GNDGL2) I(V_V1) I(V_VCUR_1)
-.print AC V(VOUT) V(VIN) V(GNDGL) V(VGL) V(GNDGL2) I(V_V1) I(V_VCUR_1)
-.print TRAN V(VOUT) V(VIN) V(GNDGL) V(VGL) V(GNDGL2) I(V_V1) I(V_VCUR_1)
+.print DC V(VGL) V(VPREREG) V(VREG) I(V_VCUR_1) I(V_V1) I(V_VCUR_2)
+.print AC V(VGL) V(VPREREG) V(VREG) I(V_VCUR_1) I(V_V1) I(V_VCUR_2)
+.print TRAN V(VGL) V(VPREREG) V(VREG) I(V_VCUR_1) I(V_V1) I(V_VCUR_2)
 .END
 
 
