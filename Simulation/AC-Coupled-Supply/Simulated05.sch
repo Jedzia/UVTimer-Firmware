@@ -57,6 +57,7 @@
 <layer number="47" name="Measures" color="7" fill="1" visible="no" active="no"/>
 <layer number="48" name="Document" color="7" fill="1" visible="no" active="no"/>
 <layer number="49" name="Reference" color="7" fill="1" visible="no" active="no"/>
+<layer number="50" name="dxf" color="7" fill="1" visible="no" active="no"/>
 <layer number="51" name="tDocu" color="7" fill="1" visible="no" active="no"/>
 <layer number="52" name="bDocu" color="7" fill="1" visible="no" active="no"/>
 <layer number="88" name="SimResults" color="9" fill="1" visible="no" active="yes"/>
@@ -71,6 +72,8 @@
 <layer number="97" name="Info" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="98" name="Guide" color="6" fill="1" visible="yes" active="yes"/>
 <layer number="99" name="SpiceOrder" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="250" name="Descript" color="3" fill="1" visible="no" active="no"/>
+<layer number="251" name="SMDround" color="12" fill="11" visible="no" active="no"/>
 </layers>
 <schematic xreflabel="%F%N/%S.%C%R" xrefpart="/%S.%C%R">
 <libraries>
@@ -702,6 +705,51 @@ http://www.fairchildsemi.com/ds/LM/LM7805.pdf</description>
 </deviceset>
 </devicesets>
 </library>
+<library name="simulation">
+<packages>
+</packages>
+<symbols>
+<symbol name="DIFFPROBE1">
+<wire x1="-5.08" y1="5.08" x2="-5.08" y2="-5.08" width="0.4064" layer="94"/>
+<wire x1="-5.08" y1="-5.08" x2="2.54" y2="-5.08" width="0.4064" layer="94"/>
+<wire x1="2.54" y1="5.08" x2="-5.08" y2="5.08" width="0.4064" layer="94"/>
+<text x="-5.08" y="6.35" size="1.778" layer="95">&gt;NAME</text>
+<text x="-5.08" y="-7.62" size="1.778" layer="96">&gt;VALUE</text>
+<pin name="IN+" x="-10.16" y="2.54" visible="pad" length="middle" swaplevel="1"/>
+<pin name="IN-" x="-10.16" y="-2.54" visible="pad" length="middle" swaplevel="1"/>
+<pin name="OUT" x="10.16" y="0" visible="pad" length="middle" direction="out" rot="R180"/>
+<wire x1="2.54" y1="5.08" x2="5.08" y2="0" width="0.254" layer="94"/>
+<wire x1="5.08" y1="0" x2="2.54" y2="-5.08" width="0.254" layer="94"/>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="DIFFPROBE">
+<gates>
+<gate name="G$1" symbol="DIFFPROBE1" x="0" y="0"/>
+</gates>
+<devices>
+<device name="">
+<technologies>
+<technology name="">
+<attribute name="_EXTERNAL_" value="" constant="no"/>
+</technology>
+</technologies>
+</device>
+</devices>
+<spice>
+<pinmapping spiceprefix="X">
+<pinmap gate="G$1" pin="IN+" pinorder="1"/>
+<pinmap gate="G$1" pin="IN-" pinorder="2"/>
+<pinmap gate="G$1" pin="OUT" pinorder="3"/>
+</pinmapping>
+<model name="MEASDIFF">
+.subckt measdiff in+ in- out
+Emeas out 0 in+ in- 1
+.ends</model>
+</spice>
+</deviceset>
+</devicesets>
+</library>
 </libraries>
 <attributes>
 </attributes>
@@ -828,6 +876,11 @@ http://www.fairchildsemi.com/ds/LM/LM7805.pdf</description>
 </part>
 <part name="C4" library="ngspice-simulation" library_urn="urn:adsk.eagle:library:527439" deviceset="C" device="" value="100n"/>
 <part name="R4" library="ngspice-simulation" library_urn="urn:adsk.eagle:library:5272020" deviceset="R" device="" value="1k"/>
+<part name="R5" library="ngspice-simulation" library_urn="urn:adsk.eagle:library:5272020" deviceset="R" device="" value="1000k"/>
+<part name="R6" library="ngspice-simulation" library_urn="urn:adsk.eagle:library:5272020" deviceset="R" device="" value="220"/>
+<part name="U$1" library="simulation" deviceset="DIFFPROBE" device=""/>
+<part name="R7" library="ngspice-simulation" library_urn="urn:adsk.eagle:library:5272020" deviceset="R" device="" value="1G"/>
+<part name="X_1" library="ngspice-simulation" library_urn="urn:adsk.eagle:library:5272020" deviceset="GND" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -874,9 +927,9 @@ Simulate transient from 1-5ms while adjusting RATIO</text>
 <attribute name="NAME" x="170.18" y="55.88" size="1.778" layer="95" rot="R90"/>
 <attribute name="VALUE" x="176.53" y="55.88" size="1.778" layer="96" rot="R90"/>
 </instance>
-<instance part="C1" gate="G$1" x="96.52" y="38.1" smashed="yes" rot="R90">
-<attribute name="NAME" x="93.98" y="40.64" size="1.778" layer="95" rot="R90"/>
-<attribute name="VALUE" x="96.52" y="40.64" size="1.778" layer="96" rot="R90"/>
+<instance part="C1" gate="G$1" x="93.98" y="38.1" smashed="yes" rot="R90">
+<attribute name="NAME" x="91.44" y="40.64" size="1.778" layer="95" rot="R90"/>
+<attribute name="VALUE" x="93.98" y="40.64" size="1.778" layer="96" rot="R90"/>
 </instance>
 <instance part="D5" gate="G$1" x="172.72" y="12.7" smashed="yes" rot="R90">
 <attribute name="NAME" x="168.91" y="7.62" size="1.778" layer="95" rot="R90"/>
@@ -916,6 +969,23 @@ Simulate transient from 1-5ms while adjusting RATIO</text>
 <attribute name="NAME" x="307.34" y="7.62" size="1.778" layer="95" rot="R90"/>
 <attribute name="VALUE" x="313.69" y="7.62" size="1.778" layer="96" rot="R90"/>
 </instance>
+<instance part="R5" gate="G$1" x="96.52" y="25.4" smashed="yes">
+<attribute name="NAME" x="93.98" y="27.94" size="1.778" layer="95"/>
+<attribute name="VALUE" x="93.98" y="21.59" size="1.778" layer="96"/>
+</instance>
+<instance part="R6" gate="G$1" x="66.04" y="38.1" smashed="yes">
+<attribute name="NAME" x="63.5" y="40.64" size="1.778" layer="95"/>
+<attribute name="VALUE" x="63.5" y="34.29" size="1.778" layer="96"/>
+</instance>
+<instance part="U$1" gate="G$1" x="71.12" y="93.98" smashed="yes">
+<attribute name="NAME" x="66.04" y="100.33" size="1.778" layer="95"/>
+<attribute name="VALUE" x="66.04" y="86.36" size="1.778" layer="96"/>
+</instance>
+<instance part="R7" gate="G$1" x="86.36" y="86.36" smashed="yes" rot="R90">
+<attribute name="NAME" x="83.82" y="83.82" size="1.778" layer="95" rot="R90"/>
+<attribute name="VALUE" x="90.17" y="83.82" size="1.778" layer="96" rot="R90"/>
+</instance>
+<instance part="X_1" gate="G$1" x="86.36" y="78.74" smashed="yes"/>
 </instances>
 <busses>
 </busses>
@@ -930,11 +1000,15 @@ Simulate transient from 1-5ms while adjusting RATIO</text>
 </net>
 <net name="VIN-L" class="0">
 <segment>
-<pinref part="R1" gate="G$1" pin="2"/>
-<label x="34.29" y="38.1" size="1.778" layer="95"/>
 <label x="78.74" y="38.1" size="1.778" layer="95"/>
-<wire x1="25.4" y1="38.1" x2="93.98" y2="38.1" width="0.1524" layer="91"/>
 <pinref part="C1" gate="G$1" pin="1"/>
+<pinref part="R5" gate="G$1" pin="1"/>
+<wire x1="88.9" y1="38.1" x2="91.44" y2="38.1" width="0.1524" layer="91"/>
+<wire x1="91.44" y1="25.4" x2="88.9" y2="25.4" width="0.1524" layer="91"/>
+<wire x1="88.9" y1="25.4" x2="88.9" y2="38.1" width="0.1524" layer="91"/>
+<junction x="88.9" y="38.1"/>
+<wire x1="71.12" y1="38.1" x2="88.9" y2="38.1" width="0.1524" layer="91"/>
+<pinref part="R6" gate="G$1" pin="2"/>
 </segment>
 </net>
 <net name="VGL" class="1">
@@ -949,9 +1023,9 @@ Simulate transient from 1-5ms while adjusting RATIO</text>
 <junction x="152.4" y="68.58"/>
 <label x="196.088" y="69.596" size="1.778" layer="95"/>
 <pinref part="R2" gate="G$1" pin="2"/>
-<wire x1="172.72" y1="63.5" x2="172.72" y2="68.58" width="0.1524" layer="91"/>
 <junction x="172.72" y="68.58"/>
 <probe x="170.18" y="71.12" size="1.778" layer="89" rot="R90" probetype="0"/>
+<wire x1="172.72" y1="63.5" x2="172.72" y2="68.58" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="VIN-N" class="0">
@@ -961,15 +1035,20 @@ Simulate transient from 1-5ms while adjusting RATIO</text>
 <wire x1="40.64" y1="17.78" x2="10.16" y2="17.78" width="0.1524" layer="91"/>
 <label x="34.29" y="17.78" size="1.778" layer="95"/>
 <wire x1="40.64" y1="17.78" x2="40.64" y2="-2.54" width="0.1524" layer="91"/>
-<wire x1="40.64" y1="-2.54" x2="132.08" y2="-2.54" width="0.1524" layer="91"/>
+<wire x1="40.64" y1="-2.54" x2="58.42" y2="-2.54" width="0.1524" layer="91"/>
 <label x="83.82" y="-2.54" size="1.778" layer="95"/>
 <pinref part="D1" gate="G$1" pin="A"/>
 <pinref part="D3" gate="G$1" pin="C"/>
+<wire x1="58.42" y1="-2.54" x2="132.08" y2="-2.54" width="0.1524" layer="91"/>
 <wire x1="152.4" y1="53.34" x2="152.4" y2="33.02" width="0.1524" layer="91"/>
 <wire x1="152.4" y1="33.02" x2="152.4" y2="17.78" width="0.1524" layer="91"/>
 <wire x1="132.08" y1="-2.54" x2="132.08" y2="33.02" width="0.1524" layer="91"/>
 <wire x1="132.08" y1="33.02" x2="152.4" y2="33.02" width="0.1524" layer="91"/>
 <junction x="152.4" y="33.02"/>
+<pinref part="U$1" gate="G$1" pin="IN-"/>
+<wire x1="60.96" y1="91.44" x2="58.42" y2="91.44" width="0.1524" layer="91"/>
+<wire x1="58.42" y1="91.44" x2="58.42" y2="-2.54" width="0.1524" layer="91"/>
+<junction x="58.42" y="-2.54"/>
 </segment>
 </net>
 <net name="0" class="0">
@@ -1013,6 +1092,11 @@ Simulate transient from 1-5ms while adjusting RATIO</text>
 <wire x1="292.1" y1="5.08" x2="292.1" y2="-2.54" width="0.1524" layer="91"/>
 <junction x="292.1" y="-2.54"/>
 </segment>
+<segment>
+<pinref part="R7" gate="G$1" pin="1"/>
+<pinref part="X_1" gate="G$1" pin="0"/>
+<wire x1="86.36" y1="81.28" x2="86.36" y2="78.74" width="0.1524" layer="91"/>
+</segment>
 </net>
 <net name="N$3" class="0">
 <segment>
@@ -1040,8 +1124,13 @@ Simulate transient from 1-5ms while adjusting RATIO</text>
 <net name="N$4" class="0">
 <segment>
 <pinref part="C1" gate="G$1" pin="2"/>
-<wire x1="101.6" y1="38.1" x2="109.22" y2="38.1" width="0.1524" layer="91"/>
+<wire x1="99.06" y1="38.1" x2="104.14" y2="38.1" width="0.1524" layer="91"/>
 <pinref part="VCUR_1" gate="G$1" pin="+"/>
+<pinref part="R5" gate="G$1" pin="2"/>
+<wire x1="104.14" y1="38.1" x2="109.22" y2="38.1" width="0.1524" layer="91"/>
+<wire x1="101.6" y1="25.4" x2="104.14" y2="25.4" width="0.1524" layer="91"/>
+<wire x1="104.14" y1="25.4" x2="104.14" y2="38.1" width="0.1524" layer="91"/>
+<junction x="104.14" y="38.1"/>
 </segment>
 </net>
 <net name="VREG" class="0">
@@ -1057,13 +1146,6 @@ Simulate transient from 1-5ms while adjusting RATIO</text>
 <junction x="210.82" y="25.4"/>
 <wire x1="210.82" y1="25.4" x2="223.52" y2="25.4" width="0.1524" layer="91"/>
 <pinref part="I_LOAD" gate="G$1" pin="+"/>
-</segment>
-</net>
-<net name="N$1" class="0">
-<segment>
-<pinref part="R2" gate="G$1" pin="1"/>
-<wire x1="172.72" y1="48.26" x2="172.72" y2="53.34" width="0.1524" layer="91"/>
-<pinref part="VCUR_2" gate="G$1" pin="+"/>
 </segment>
 </net>
 <net name="VOUT" class="0">
@@ -1089,6 +1171,36 @@ Simulate transient from 1-5ms while adjusting RATIO</text>
 <pinref part="C4" gate="G$1" pin="1"/>
 <wire x1="292.1" y1="12.7" x2="292.1" y2="25.4" width="0.1524" layer="91"/>
 <junction x="292.1" y="25.4"/>
+</segment>
+</net>
+<net name="N$5" class="0">
+<segment>
+<pinref part="R1" gate="G$1" pin="2"/>
+<wire x1="25.4" y1="38.1" x2="27.94" y2="38.1" width="0.1524" layer="91"/>
+<label x="34.29" y="38.1" size="1.778" layer="95"/>
+<pinref part="R6" gate="G$1" pin="1"/>
+<probe x="48.26" y="48.26" size="1.778" layer="89" probetype="0"/>
+<pinref part="U$1" gate="G$1" pin="IN+"/>
+<wire x1="27.94" y1="38.1" x2="60.96" y2="38.1" width="0.1524" layer="91"/>
+<wire x1="60.96" y1="96.52" x2="27.94" y2="96.52" width="0.1524" layer="91"/>
+<wire x1="27.94" y1="96.52" x2="27.94" y2="38.1" width="0.1524" layer="91"/>
+<junction x="27.94" y="38.1"/>
+</segment>
+</net>
+<net name="DIFF" class="0">
+<segment>
+<pinref part="R7" gate="G$1" pin="2"/>
+<wire x1="86.36" y1="91.44" x2="86.36" y2="93.98" width="0.1524" layer="91"/>
+<pinref part="U$1" gate="G$1" pin="OUT"/>
+<wire x1="86.36" y1="93.98" x2="81.28" y2="93.98" width="0.1524" layer="91"/>
+<probe x="91.44" y="99.06" size="1.778" layer="89" probetype="0"/>
+</segment>
+</net>
+<net name="N$7" class="0">
+<segment>
+<pinref part="R2" gate="G$1" pin="1"/>
+<pinref part="VCUR_2" gate="G$1" pin="+"/>
+<wire x1="172.72" y1="48.26" x2="172.72" y2="53.34" width="0.1524" layer="91"/>
 </segment>
 </net>
 </nets>

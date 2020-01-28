@@ -1,0 +1,66 @@
+Warning: v_i_load: has no value, DC 0 assumed
+Warning: v_vcur_2: has no value, DC 0 assumed
+
+Circuit: * spicenetlist
+
+Doing analysis at TEMP = 0.000000 and TNOM = 27.000000
+
+
+Initial Transient Solution
+--------------------------
+
+Node                                   Voltage
+----                                   -------
+n_3                                   0.128571
+n_7                                   0.257934
+vprereg                               0.257934
+diff                                         0
+n_4                                   0.128571
+vin-l                                 0.128571
+vreg                              6.48083e-007
+x_d5.3                                -7.18207
+vin-n                                 0.128571
+vout                              6.48083e-007
+v_lin                             1.14775e-015
+n_5                                   0.128571
+vgl                                   0.257934
+n_2                                   0.128571
+x_ic1.23                          1.51764e-009
+x_ic1.10                          3.64379e-018
+x_ic1.5                           1.51764e-009
+x_ic1.4                           1.51764e-009
+x_ic1.7                           2.01877e-011
+x_ic1.6                           9.32863e-016
+x_ic1.9                           6.48083e-007
+x_ic1.8                            1.1173e-014
+x_ic1.11                          1.51123e-007
+x_ic1.13                          5.57619e-015
+x_ic1.12                          1.51764e-009
+x_ic1.15                          2.90144e-015
+x_ic1.14                          1.14813e-015
+x_ic1.16                          1.64648e-016
+x_ic1.17                            1.208e-008
+x_ic1.18                          1.90293e-008
+x_ic1.19                          7.61736e-017
+x_ic1.20                          6.40158e-008
+x_ic1.21                          6.40158e-008
+x_ic1.22                          1.14778e-015
+x_ic1.24                          6.40158e-008
+x_ic1.25                          1.70199e-015
+x_ic1.26                          6.48083e-007
+x_ic1.27                            1.208e-008
+x_ic1.28                           8.4352e-016
+x_ic1.29                          4.79408e-021
+e.x_u$1.emeas#branch                         0
+v_v1#branch                      -7.91367e-016
+v_i_load#branch                   6.48084e-012
+v.x_d5.vz#branch                  -7.1822e-012
+v_vcur_1#branch                  -7.91366e-016
+v_vcur_2#branch                   -2.5894e-013
+
+ASCII raw file
+doAnalyses: TRAN:  Timestep too small; time = 0.0453844, timestep = 3.75e-016: trouble with node "n_3"
+
+
+tran simulation(s) aborted
+Note: No ".plot", ".print", or ".fourier" lines; no simulations run

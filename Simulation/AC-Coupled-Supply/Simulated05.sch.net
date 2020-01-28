@@ -1,6 +1,6 @@
 * SpiceNetList
 * 
-* Exported from Simulated04.sch at 26.01.2020 23:03
+* Exported from Simulated05.sch at 28.01.2020 17:30
 * 
 * EAGLE Version 9.5.2 Copyright (c) 1988-2019 Autodesk, Inc.
 * 
@@ -10,25 +10,29 @@
 .PARAM RATIO=1/10
 
 * --------- devices ---------
-D_D3 0 VIN-N DMOD 
-R_R1 N_2 VIN-L 0.01 
-R_R4 0 V_LIN 1k 
-C_C4 V_LIN 0 100n 
-V_I_LOAD VREG VOUT 
-V_VCUR_1 N_4 N_3 DC 0V AC 0 
 D_D4 0 N_3 DMOD 
-V_V1 N_2 VIN-N DC 0V AC 340V SIN(0 340 50hz 0 0) 
-D_D1 VIN-N VGL DMOD 
+V_VCUR_2 N_7 VPREREG 
+R_R7 0 DIFF 1G 
+V_VCUR_1 N_4 N_3 DC 0V AC 0 
+R_R5 VIN-L N_4 1000k 
 D_D6 VPREREG VREG DMOD 
-C_C2 VREG 0 100n 
-R_R2 N_1 VGL 220 
 C_C3 VREG 0 47u 
-D_D2 N_3 VGL DMOD 
-R_R3 0 VOUT 100k 
 X_D5 0 VPREREG DI_BZT52C9V1LP 
-V_VCUR_2 N_1 VPREREG 
+D_D3 0 VIN-N DMOD 
+V_I_LOAD VREG VOUT 
+C_C2 VREG 0 100n 
+R_R4 0 V_LIN 1k 
+R_R6 N_5 VIN-L 220 
+C_C4 V_LIN 0 100n 
+D_D1 VIN-N VGL DMOD 
 C_C1 VIN-L N_4 .39u 
+R_R2 N_7 VGL 220 
+R_R3 0 VOUT 100k 
+V_V1 N_2 VIN-N DC 0V AC 340V SIN(0 340 50hz 0 0) 
+X_U$1 N_5 VIN-N DIFF MEASDIFF 
 X_IC1 VOUT 0 V_LIN LM7805 
+R_R1 N_2 N_5 0.01 
+D_D2 N_3 VGL DMOD 
 
 * --------- models ---------
 
@@ -40,6 +44,13 @@ X_IC1 VOUT 0 V_LIN LM7805
 * basic diode intrinsic model
 **********************
 .MODEL DMOD D
+
+
+* (model found in library)
+
+.subckt measdiff in+ in- out
+Emeas out 0 in+ in- 1
+.ends
 
 
 * model file: E:/Projects/Elektronik/Arduino/ATtiny/UVTimer/Simulation/AC-Coupled-Supply/DI_BZT52C9V1LP.mdl
@@ -120,9 +131,9 @@ R1           8   13      7K
 
 
 * --------- simulation ---------
-.print DC V(VGL) V(VPREREG) V(VOUT) V(V_LIN) I(V_VCUR_1) I(V_I_LOAD) I(V_V1) I(V_VCUR_2)
-.print AC V(VGL) V(VPREREG) V(VOUT) V(V_LIN) I(V_VCUR_1) I(V_I_LOAD) I(V_V1) I(V_VCUR_2)
-.print TRAN V(VGL) V(VPREREG) V(VOUT) V(V_LIN) I(V_VCUR_1) I(V_I_LOAD) I(V_V1) I(V_VCUR_2)
+.print DC V(VGL) V(VPREREG) V(VOUT) V(V_LIN) V(N_5) V(DIFF) I(V_I_LOAD) I(V_VCUR_1) I(V_V1) I(V_VCUR_2)
+.print AC V(VGL) V(VPREREG) V(VOUT) V(V_LIN) V(N_5) V(DIFF) I(V_I_LOAD) I(V_VCUR_1) I(V_V1) I(V_VCUR_2)
+.print TRAN V(VGL) V(VPREREG) V(VOUT) V(V_LIN) V(N_5) V(DIFF) I(V_I_LOAD) I(V_VCUR_1) I(V_V1) I(V_VCUR_2)
 .END
 
 
