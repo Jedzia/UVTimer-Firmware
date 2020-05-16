@@ -60,15 +60,12 @@
 #define LED5            1 // PD1
 #define LED6          SCL // PC5
 
-#define LED1Pin      13
-#define LED2Pin       5
-
 // Debouncers
-const int DebounceInverval = 75;
+const int DebounceInterval = 75;
 //EasyButton  debInput1  = EasyButton (ButtonS1, DebounceInverval, true, true);
 //EasyButton  debInput2  = EasyButton (ButtonS2, DebounceInverval, true, true);
 //EasyButton  debInput3  = EasyButton (ButtonS3, DebounceInverval, true, true);
-EasyButton debInput4 = EasyButton(ButtonS4, DebounceInverval, true, true);
+EasyButton debInput4 = EasyButton(ButtonS4, DebounceInterval, true, true);
 //EasyButton  debInput5  = EasyButton (ButtonS5, DebounceInverval, true, true);
 //EasyButton  debInput6  = EasyButton (ButtonS6, DebounceInverval, true, true);
 

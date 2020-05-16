@@ -64,7 +64,7 @@ void setup() {
     //debInput6.begin();
 
     setupIRQ();
-} // setup
+}// setup
 
 void onShortPressed() {
     if(shortBlink == 0) {
@@ -91,73 +91,75 @@ void loop() {
     //debInput6.read();
 
     /*//if (debInput4.fell() && !shouldBlinkShort)
-       if (debInput4.rose() && debInput4.duration() < ButtonPressLong && !shouldBlinkShort)
-       {
-       shouldBlinkShort = true;
-       }
+           if (debInput4.rose() && debInput4.duration() < ButtonPressLong && !shouldBlinkShort)
+           {
+           shouldBlinkShort = true;
+           }
 
-       //if (!debInput4.read() && debInput4.duration() > ButtonPressLong && !shouldBlinkLong)
-       if (debInput4.duration() > ButtonPressLong && debInput4.rose() && !shouldBlinkLong)
-       {
-       shouldBlinkLong = true;
-       }*/
+           //if (!debInput4.read() && debInput4.duration() > ButtonPressLong && !shouldBlinkLong)
+           if (debInput4.duration() > ButtonPressLong && debInput4.rose() && !shouldBlinkLong)
+           {
+           shouldBlinkLong = true;
+           }*/
 
     //  digitalWrite(LED1Pin, debInput1.read());
     //  digitalWrite(LED1Pin, debInput4.read());
 
     /*if(shouldBlinkLong)
-       {
-       digitalWrite(LED2Pin, true);
-       delay(LongBlinkTime);
-       digitalWrite(LED2Pin, false);
+           {
+           digitalWrite(LED2Pin, true);
+           delay(LongBlinkTime);
+           digitalWrite(LED2Pin, false);
 
-       shouldBlinkLong = false;
+           shouldBlinkLong = false;
 
-       //shortBlink = ShortBlinkTime;
-       }*/
+           //shortBlink = ShortBlinkTime;
+           }*/
 }
 
 ISR(TIMER1_COMPA_vect)
 {
     //PORTB ^= B00100000;// toggles bit which affects pin13
     if(shouldBlinkShort) {
-        bool led1State = digitalRead(LED1Pin);
-        digitalWrite(LED1Pin, led1State ^ 1);
+        bool led1State = digitalRead(LED1);
+        digitalWrite(LED1, led1State ^ 1);
         if(led1State) {
             shouldBlinkShort = false;
         }
     }
 
     /*if(shouldBlinkLong)
-       {
-       bool led2State = digitalRead(LED2Pin);
-       digitalWrite(LED2Pin, led2State ^ 1);
-       if(led2State)
-       {
-        shouldBlinkLong = false;
-       }
-       }*/
+           {
+           bool led2State = digitalRead(LED2Pin);
+           digitalWrite(LED2Pin, led2State ^ 1);
+           if(led2State)
+           {
+            shouldBlinkLong = false;
+           }
+           }*/
 
     if(shortBlink > 0) {
         //bool led2State = digitalRead(LED2Pin);
         //digitalWrite(LED2Pin, led2State ^ 1);
         //digitalWrite(LED2Pin, !((shortBlink % 4) <= 2));
-        digitalWrite(LED2Pin, !((shortBlink % 2)));
+        digitalWrite(LED2, !((shortBlink % 2)));
         /*if(led2State)
-           {
-           shouldBlinkLong = false;
-           }*/
+                   {
+                   shouldBlinkLong = false;
+                   }*/
         shortBlink--;
     }
 
     if(longBlink > 0) {
         //bool led2State = digitalRead(LED2Pin);
         //digitalWrite(LED2Pin, led2State ^ 1);
-        digitalWrite(LED2Pin, !((longBlink % 8) <= 4));
+        digitalWrite(LED2, !((longBlink % 8) <= 4));
         /*if(led2State)
-           {
-           shouldBlinkLong = false;
-           }*/
+                   {
+                   shouldBlinkLong = false;
+                   }*/
         longBlink--;
     }
+
+    digitalWrite(LED6, !digitalRead(LED6));
 }
