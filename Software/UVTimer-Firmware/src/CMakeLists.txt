@@ -1,5 +1,5 @@
 #get_filename_component(PROJECT_NAME ${CMAKE_SOURCE_DIR}../ NAME)
-set(PROJECT_NAME avr_blink)
+set(PROJECT_NAME uvtimer)
 message(STATUS "Configuring project ${PROJECT_NAME}")
 project(${PROJECT_NAME} C CXX ASM)
 

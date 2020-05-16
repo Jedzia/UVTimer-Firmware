@@ -1,4 +1,4 @@
-# The Arduino platform library
+# A Debounce and Button handling library
 
 add_library (easy_button
 		src/Sequence.h

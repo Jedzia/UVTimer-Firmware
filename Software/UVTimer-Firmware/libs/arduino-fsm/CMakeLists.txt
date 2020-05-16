@@ -1,4 +1,4 @@
-# The Arduino platform library
+# A Finite State Machine library
 
 add_library (arduino_fsm
 		Fsm.h

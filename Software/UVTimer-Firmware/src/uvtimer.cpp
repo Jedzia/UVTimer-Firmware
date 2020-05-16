@@ -49,8 +49,9 @@ void onShortPressed();
 void onLongPressed();
 
 void setup() {
-    pinMode(LED1Pin, OUTPUT);// enable LED1 output
-    pinMode(LED2Pin, OUTPUT);// enable LED1 output
+    //pinMode(LED1Pin, OUTPUT);// enable LED1 output
+    //pinMode(LED2Pin, OUTPUT);// enable LED1 output
+    shield_setup();
 
     debInput4.onPressed(onShortPressed);
     debInput4.onPressedFor(ButtonPressLongDuration, onLongPressed);
@@ -63,10 +64,10 @@ void setup() {
     //debInput6.begin();
 
     setupIRQ();
-}
+} // setup
 
 void onShortPressed() {
-    if(!shortBlink) {
+    if(shortBlink == 0) {
         //if(!shouldBlinkShort)
         //shouldBlinkShort = true;
         shortBlink = ShortBlinkTime;
@@ -74,7 +75,7 @@ void onShortPressed() {
 }
 
 void onLongPressed() {
-    if(!longBlink) {
+    if(longBlink == 0) {
         //shouldBlinkLong = true;
         longBlink = LongBlinkTime;
     }
@@ -137,7 +138,7 @@ ISR(TIMER1_COMPA_vect)
        }
        }*/
 
-    if(shortBlink) {
+    if(shortBlink > 0) {
         //bool led2State = digitalRead(LED2Pin);
         //digitalWrite(LED2Pin, led2State ^ 1);
         //digitalWrite(LED2Pin, !((shortBlink % 4) <= 2));
@@ -149,7 +150,7 @@ ISR(TIMER1_COMPA_vect)
         shortBlink--;
     }
 
-    if(longBlink) {
+    if(longBlink > 0) {
         //bool led2State = digitalRead(LED2Pin);
         //digitalWrite(LED2Pin, led2State ^ 1);
         digitalWrite(LED2Pin, !((longBlink % 8) <= 4));
