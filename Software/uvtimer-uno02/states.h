@@ -18,10 +18,11 @@ void check_button();
  * transition from s1 to s2 on button press
  * transition back from s2 to s1 after 3 seconds or button press
  */
+State state_Startup(&led_off, &check_button, NULL);
 State state_Idle(&led_off, &check_button, NULL);
 State state_TimerRunning(&led_on, &check_button, NULL);
 State state_TimerSetup(&led_on, &check_button, NULL);
-Fsm fsm(&state_Idle);
+Fsm fsm(&state_Startup);
 
 // Transition functions
 void led_off()
@@ -44,6 +45,10 @@ void check_button()
     //Serial.println("button_pressed");
     fsm.trigger(BUTTON_EVENT);
   }
+}
+
+void setupTransitions() {
+
 }
 
 
