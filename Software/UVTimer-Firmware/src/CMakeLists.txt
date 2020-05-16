@@ -12,9 +12,16 @@ project(${PROJECT_NAME} C CXX ASM)
 #endif()
 
 # Main target that uses the arduino core library
-add_executable(${PROJECT_NAME}.elf main.cpp)
+set(SRC_FILES
+        io.h
+        states.h
+        uvtimer.cpp
+        main.cpp
+        )
+add_executable(${PROJECT_NAME}.elf ${SRC_FILES})
 target_link_libraries(${PROJECT_NAME}.elf PRIVATE
         arduino::core
+        libs::easy_button libs::arduino_fsm
         # arduino_options # already imported as public with arduino::core.
         project_options
         # project_warnings # ToDo: make this work
