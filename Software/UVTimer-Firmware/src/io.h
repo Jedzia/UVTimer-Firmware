@@ -45,20 +45,20 @@
 // (PWM+ indicates the additional PWM pins on the ATmega168.)
 
 // Buttons
-#define ButtonS1        4 // PD4, Down
-#define ButtonS2        7 // PD7, Up
-#define ButtonS3        8 // PB0, Start
-#define ButtonS4        6 // PD6, A
-#define ButtonS5      SDA // PC4, B
-#define ButtonS6       12 // PB4, Discharge
+#define ButtonS1 4// PD4, Down
+#define ButtonS2 7// PD7, Up
+#define ButtonS3 8// PB0, Start
+#define ButtonS4 6// PD6, A
+#define ButtonS5 SDA// PC4, B
+#define ButtonS6 12// PB4, Discharge
 
 // LEDs
-#define LED1           13 // PB5
-#define LED2            5 // PD5
-#define LED3           10 // PB2
-#define LED4            9 // PB1
-#define LED5            1 // PD1
-#define LED6          SCL // PC5
+#define LED1 13// PB5
+#define LED2 5// PD5
+#define LED3 10// PB2
+#define LED4 9// PB1
+#define LED5 1// PD1
+#define LED6 SCL// PC5
 
 // Debouncers
 const int DebounceInterval = 75;
@@ -87,17 +87,17 @@ void shield_setup() {
     pinMode(LED6, OUTPUT);
 
     /*// setup TIMER1 COMPARE
-    cli();
-    TCCR1A = 0;
-    TCCR1B = 0;
-    //OCR1A = 15624; // = (target time / timer resolution) - 1 or 1 / 6.4e-5 - 1 = 15624
-    OCR1A = 15624 >> 4;
-    TCCR1B |= (1 << WGM12);     // CTC mode on
-    TCCR1B |= (1 << CS10);      // Set CS10 and CS12 bits for 1024 prescaler:
-    TCCR1B |= (1 << CS12);
-    TIMSK1 |= (1 << OCIE1A);    // timer compare interrupt
-    sei();*/
-} // xsetup
+       cli();
+       TCCR1A = 0;
+       TCCR1B = 0;
+       //OCR1A = 15624; // = (target time / timer resolution) - 1 or 1 / 6.4e-5 - 1 = 15624
+       OCR1A = 15624 >> 4;
+       TCCR1B |= (1 << WGM12);     // CTC mode on
+       TCCR1B |= (1 << CS10);      // Set CS10 and CS12 bits for 1024 prescaler:
+       TCCR1B |= (1 << CS12);
+       TIMSK1 |= (1 << OCIE1A);    // timer compare interrupt
+       sei();*/
+}// xsetup
 
 void test_loop() {
     /*digitalWrite(LED2, !digitalRead(ButtonS1)); // turn the LED on (HIGH is On)
@@ -108,7 +108,7 @@ void test_loop() {
        digitalWrite(LED6, !digitalRead(ButtonS6));*/
 
     if(!digitalRead(ButtonS1)) {
-        digitalWrite(LED1, true); // turn the LED on (true is On)
+        digitalWrite(LED1, true);// turn the LED on (true is On)
     }
 }
 
@@ -132,4 +132,4 @@ void test_loop() {
    digitalWrite(LED6, shiftRegister & 1 << 6);
    }*/
 
-#endif // __IO_H__
+#endif// __IO_H__
