@@ -40,7 +40,7 @@ void led_on()
 // Transition functions
 void check_button()
 {
-  int buttonState = digitalRead(butInput2);
+  int buttonState = digitalRead(ButtonS2);
   if (buttonState == LOW) {
     //Serial.println("button_pressed");
     fsm.trigger(BUTTON_EVENT);

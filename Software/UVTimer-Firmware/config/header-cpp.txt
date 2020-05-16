@@ -1,15 +1,15 @@
 /*---------------------------------------------------------*/
 /*!
- * This file is part of the SD_RTC Datalogger Shield example repository.
+ * This file is part of the UVTimer project.
  * License details can be found in the file COPYING.
  * Copyright (c) 2020, EvePanix. All rights reserved.
  *
  * \brief      This file contains the definition of
  *             the $(filename) class.
  * \file       $(filename)
- * \date       2020-01-01
+ * \date       2020-05-16
  * \author     Jedzia.
  *
- * modified    2020-01-01, Jedzia
+ * modified    2020-05-16, Jedzia
  */
 /*---------------------------------------------------------*/
