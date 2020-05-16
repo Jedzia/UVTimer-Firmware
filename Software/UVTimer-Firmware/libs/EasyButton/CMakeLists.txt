@@ -27,4 +27,4 @@ if (ENABLE_UNITY)
 endif()
 
 #export library
-#add_library(arduino::core ALIAS easy_button)
+add_library(libs::easy_button ALIAS easy_button)

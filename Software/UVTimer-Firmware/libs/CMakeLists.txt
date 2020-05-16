@@ -1,2 +1,3 @@
 add_subdirectory(libarduinocore)
 add_subdirectory(EasyButton)
+add_subdirectory(arduino-fsm)
