@@ -7,10 +7,10 @@
  * \brief      This file contains the definition of
  *             the main application startup code.
  * \file       src/main.cpp
- * \date       2020-01-01
+ * \date       2020-05-16
  * \author     Jedzia.
  *
- * modified    2020-01-01, Jedzia
+ * modified    2020-05-16, Jedzia
  *
  */
 /*---------------------------------------------------------*/
