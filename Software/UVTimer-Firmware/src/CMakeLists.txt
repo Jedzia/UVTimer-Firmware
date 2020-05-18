@@ -13,12 +13,17 @@ project(${PROJECT_NAME} C CXX ASM)
 
 # Main target that uses the arduino core library
 set(SRC_FILES
+        DisplayLED.cpp
+        DisplayLED.h
+        io.cpp
         io.h
-        states.h
-        uvtimer.h
-        uvtimer.cpp
         main.cpp
-        stdinout.h stdinout.cpp)
+        states.h
+        stdinout.cpp
+        stdinout.h
+        uvtimer.cpp
+        uvtimer.h
+        )
 add_executable(${PROJECT_NAME}.elf ${SRC_FILES})
 target_link_libraries(${PROJECT_NAME}.elf PRIVATE
         arduino::core

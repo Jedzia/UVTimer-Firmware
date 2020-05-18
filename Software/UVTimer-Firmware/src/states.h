@@ -5,7 +5,9 @@
  * Copyright (c) 2020, EvePanix. All rights reserved.
  *
  * \brief      This file contains the definition of
- *             the states.h class.
+ *             transition and transition-callback functions
+ *             used by the finite-state-machine of the
+ *             application.
  * \file       states.h
  * \date       2020-05-16
  * \author     Jedzia.

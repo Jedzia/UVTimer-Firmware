@@ -18,6 +18,7 @@
 #include "io.h"
 #include "states.h"
 #include "stdinout.h"
+#include "DisplayLED.h"
 
 #define STR_INDIRECTION(x) #x
 #define STR(x) STR_INDIRECTION(x)
@@ -25,13 +26,15 @@
 // Variables
 Fsm* G_FSM = nullptr;
 volatile uint32_t system_tick = 0;
-volatile int shortBlink = 0;
-volatile int longBlink = 0;
+//volatile int shortBlink = 0;
+//volatile int longBlink = 0;
 
-volatile bool shouldBlinkShort;
-volatile bool shouldBlinkLong;
+//volatile bool shouldBlinkShort;
+//volatile bool shouldBlinkLong;
 
 Fsm::Timer timer1 = nullptr;
+
+DisplayLED displayLed{};
 
 void setupIRQ() {
     //DDRB |= B00100000;  // set pin13 to output without affecting other pins
@@ -190,7 +193,7 @@ void timer_is_running() {
 }
 
 void onShortPressed() {
-    if(shortBlink == 0) {
+    if(displayLed.isNotShortBlinking()) {
         //Serial.println("onShortPressed " STR(ShortBlinkTime));
         unsigned long now = millis();
         //const long long timer_ms = static_cast<long long>(timer1.m_timed_transitions->interval) - (static_cast<long long>(now) - static_cast<long long>(timer1.m_timed_transitions->start));
@@ -214,62 +217,21 @@ void onShortPressed() {
         //if(!shouldBlinkShort)
         //shouldBlinkShort = true;
         //shortBlink = ShortBlinkTime;
-        shortBlink = set_blink;
+        displayLed.setShortBlink(set_blink);
     }
 }// onShortPressed
 
 void onLongPressed() {
-    if(longBlink == 0) {
+    if(displayLed.isNotLongBlinking()) {
         //shouldBlinkLong = true;
-        longBlink = LongBlinkTime;
+        displayLed.setLongBlink(LongBlinkTime);
     }
 }
 
 ISR(TIMER1_COMPA_vect) {
     system_tick++;
-    //PORTB ^= B00100000;// toggles bit which affects pin13
-    if(shouldBlinkShort) {
-        bool led1State = digitalRead(LED1);
-        digitalWrite(LED1, led1State ^ 1);
-        if(led1State) {
-            shouldBlinkShort = false;
-        }
-    }
 
-    /*if(shouldBlinkLong)
-           {
-           bool led2State = digitalRead(LED2Pin);
-           digitalWrite(LED2Pin, led2State ^ 1);
-           if(led2State)
-           {
-            shouldBlinkLong = false;
-           }
-           }*/
-
-    if(shortBlink > 0) {
-        //bool led2State = digitalRead(LED2Pin);
-        //digitalWrite(LED2Pin, led2State ^ 1);
-        //digitalWrite(LED2Pin, !((shortBlink % 4) <= 2));
-        const int every_second_tick = 2;
-        digitalWrite(LED2, static_cast<uint8_t>(((shortBlink % every_second_tick)) == 0));
-        /*if(led2State)
-                   {
-                   shouldBlinkLong = false;
-                   }*/
-        shortBlink--;
-    }
-
-    if(longBlink > 0) {
-        //bool led2State = digitalRead(LED2Pin);
-        //digitalWrite(LED2Pin, led2State ^ 1);
-        const int every_eight_tick = 8;
-        digitalWrite(LED2, static_cast<uint8_t>(longBlink % every_eight_tick > 4));
-        /*if(led2State)
-                   {
-                   shouldBlinkLong = false;
-                   }*/
-        longBlink--;
-    }
+    displayLed.display();
 
     digitalWrite(LED6, static_cast<uint8_t>(digitalRead(LED6) == 0));
 }

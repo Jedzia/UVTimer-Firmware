@@ -5,7 +5,7 @@
  * Copyright (c) 2020, EvePanix. All rights reserved.
  *
  * \brief      This file contains constants and
- *             definitions for the uvtimer.cpp main
+ *             definitions for the uvtimer main
  *             application unit.
  * \file       uvtimer.h
  * \date       2020-05-18
