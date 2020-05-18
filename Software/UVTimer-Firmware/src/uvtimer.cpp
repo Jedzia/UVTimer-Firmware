@@ -15,12 +15,12 @@
 /*---------------------------------------------------------*/
 #include "uvtimer.h"
 //
+#include "DisplayLED.h"
 #include "io.h"
 #include "states.h"
 #include "stdinout.h"
-#include "DisplayLED.h"
 
-#define STR_INDIRECTION(x) #x
+#define STR_INDIRECTION(x) # x
 #define STR(x) STR_INDIRECTION(x)
 
 // Variables
@@ -54,6 +54,7 @@ void setupIRQ() {
 void onShortPressed();
 
 void onLongPressed();
+
 void timer_is_running();
 
 int main() {
@@ -196,7 +197,9 @@ void onShortPressed() {
     if(displayLed.isNotShortBlinking()) {
         //Serial.println("onShortPressed " STR(ShortBlinkTime));
         unsigned long now = millis();
-        //const long long timer_ms = static_cast<long long>(timer1.m_timed_transitions->interval) - (static_cast<long long>(now) - static_cast<long long>(timer1.m_timed_transitions->start));
+        //const long long timer_ms = static_cast<long long>(timer1.m_timed_transitions->interval) -
+        // (static_cast<long long>(now) - static_cast<long
+        // long>(timer1.m_timed_transitions->start));
         const unsigned long timer_ms = now - timer1.m_timed_transitions->start;
         const unsigned long timer_ms_left = timer1.m_timed_transitions->interval + 1 - (now - timer1.m_timed_transitions->start);
         int set_blink = static_cast<int>(timer_ms_left / 1000);
@@ -205,13 +208,13 @@ void onShortPressed() {
         }
 
         printf("[onShortPressed-%d]: now: %lu, interval: %lu, start: %lu, time ms: %lu, time left: %lu, setblink: %d\n",
-          ShortBlinkTime,
-          now,
-          timer1.m_timed_transitions->interval,
-          timer1.m_timed_transitions->start,
-          timer_ms,
-          timer_ms_left,
-          set_blink);
+                ShortBlinkTime,
+                now,
+                timer1.m_timed_transitions->interval,
+                timer1.m_timed_transitions->start,
+                timer_ms,
+                timer_ms_left,
+                set_blink);
         //timer1.m_timed_transitions->transition,
         //timer1.m_timed_transitions->interval;
         //if(!shouldBlinkShort)

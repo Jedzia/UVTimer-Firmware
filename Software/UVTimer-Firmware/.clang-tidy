@@ -1,7 +1,14 @@
 ---
-Checks:          '*,-fuchsia-*,-google-*,-zircon-*,-abseil-*,-modernize-use-trailing-return-type,-llvm-*'
+Checks:          '*,-fuchsia-*,-google-*,-zircon-*,-abseil-*,-modernize-use-trailing-return-type,-llvm-*,
+                  -cppcoreguidelines-pro-type-*,
+                  llvm-include-order
+                  '
+#Checks:          '*'
 WarningsAsErrors: '*'
 HeaderFilterRegex: ''
 FormatStyle:     none
+CheckOptions:
+  - key:             readability-magic-numbers.IgnoredIntegerValues
+    value:           '1;2;3;4;10;50;100;1000'
 
 
