@@ -43,9 +43,9 @@ void Fsm::add_transition(State* state_from, State* state_to, int event, void (* 
     m_num_transitions++;
 }
 
-void Fsm::add_timed_transition(State* state_from, State* state_to, unsigned long interval, void (* on_transition)()) {
+Fsm::Timer Fsm::add_timed_transition(State* state_from, State* state_to, unsigned long interval, void (* on_transition)()) {
     if(state_from == nullptr || state_to == nullptr) {
-        return;
+        return {nullptr};
     }
 
     Transition transition = Fsm::create_transition(state_from, state_to, 0, on_transition);
@@ -59,6 +59,7 @@ void Fsm::add_timed_transition(State* state_from, State* state_to, unsigned long
             m_timed_transitions, (m_num_timed_transitions + 1) * sizeof(TimedTransition));
     m_timed_transitions[m_num_timed_transitions] = timed_transition;
     m_num_timed_transitions++;
+    return Timer(&timed_transition);
 } // Fsm::add_timed_transition
 
 Fsm::Transition Fsm::create_transition(State* state_from, State* state_to, int event, void (* on_transition)()) {
@@ -163,3 +164,6 @@ void Fsm::make_transition(Transition* transition) {
         }
     }
 } // Fsm::make_transition
+
+Fsm::Timer::Timer(const Fsm::TimedTransition *pTransition) : m_timed_transitions(pTransition) {
+}

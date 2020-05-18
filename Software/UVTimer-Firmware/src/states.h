@@ -25,7 +25,7 @@
 #define START_TIMER_BUTTON_EVENT 2
 #define RESET_TIMER_BUTTON_EVENT 3
 
-Fsm *G_FSM = nullptr;
+Fsm* G_FSM = nullptr;
 
 int buttonState = 0;
 
@@ -36,32 +36,26 @@ void led_on();
 void check_button();
 
 // Transition callback functions
-void state_startup_on_enter()
-{
+void state_startup_on_enter() {
     Serial.println("Entering STARTUP");
 }
 
-void state_startup_on_exit()
-{
+void state_startup_on_exit() {
     Serial.println("Exiting STARTUP");
 }
 
-void state_idle_on_enter()
-{
+void state_idle_on_enter() {
     Serial.println("Entering IDLE");
 }
 
-void state_idle_on_exit()
-{
+void state_idle_on_exit() {
     Serial.println("Exiting IDLE");
 }
 
-void state_timer_finished_on_enter()
-{
+void state_timer_finished_on_enter() {
     Serial.println("Entering TIMER_FINISHED");
     //G_FSM->trigger(ADVANCE_EVENT);
 }
-
 
 void led_off() {
     //Serial.println("led_off");
@@ -88,19 +82,21 @@ void on_timer_running() {
     Serial.println("timer running");
     digitalWrite(LED3, true);// turn the LED on (true is On)
 }
+
 void on_timer_finished() {
     Serial.println("timer finished");
     digitalWrite(LED3, false);// turn the LED on (true is On)
 }
+
 void on_timer_reset() {
     Serial.println("timer reset");
     digitalWrite(LED3, false);// turn the LED on (true is On)
 }
+
 void on_timer_cancelled() {
     Serial.println("timer cancelled");
     digitalWrite(LED3, false);// turn the LED on (true is On)
 }
-
 
 void check_button(/*Fsm &fsm*/) {
     //Serial.println("check_button()");
@@ -111,24 +107,8 @@ void check_button(/*Fsm &fsm*/) {
     }
 }
 
-void check_timer_running_button(/*Fsm &fsm*/) {
-//    Serial.println("check_timer_running_button()");
-    int buttonStateS1 = digitalRead(ButtonS1);
-    if(buttonStateS1 == LOW) {
-        Serial.println("button_pressed RESET_TIMER_BUTTON_EVENT");
-        //G_FSM->reset_timed_transition(nullptr);
-        G_FSM->trigger(RESET_TIMER_BUTTON_EVENT);
-    }
-}
+void check_other_button(/*Fsm &fsm*/);
 
-void check_other_button(/*Fsm &fsm*/) {
-//    Serial.println("check_other_button()");
-    int buttonStateS2 = digitalRead(ButtonS2);
-    if(buttonStateS2 == LOW) {
-        Serial.println("button_pressed START_TIMER_BUTTON_EVENT");
-        delay(100);
-        G_FSM->trigger(START_TIMER_BUTTON_EVENT);
-    }
-}
+void check_timer_running_button(/*Fsm &fsm*/);
 
 #endif// __STATES_H__

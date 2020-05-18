@@ -15,9 +15,10 @@ project(${PROJECT_NAME} C CXX ASM)
 set(SRC_FILES
         io.h
         states.h
+        uvtimer.h
         uvtimer.cpp
         main.cpp
-        )
+        stdinout.h stdinout.cpp)
 add_executable(${PROJECT_NAME}.elf ${SRC_FILES})
 target_link_libraries(${PROJECT_NAME}.elf PRIVATE
         arduino::core

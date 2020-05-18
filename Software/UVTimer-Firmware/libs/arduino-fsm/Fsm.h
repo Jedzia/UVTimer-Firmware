@@ -32,14 +32,16 @@ struct State {
 };
 
 
+
 class Fsm {
   public:
+    class Timer;
     Fsm(State *initial_state);
     ~Fsm();
 
     void add_transition(State *state_from, State *state_to, int event, void (*on_transition)() = nullptr);
 
-    void add_timed_transition(State *state_from, State *state_to, unsigned long interval, void (*on_transition)() = nullptr);
+    Timer add_timed_transition(State *state_from, State *state_to, unsigned long interval, void (*on_transition)() = nullptr);
 
     /**
      * checks the timed transitions for the current state and if timeout occured
@@ -92,7 +94,16 @@ class Fsm {
     TimedTransition *m_timed_transitions;
     int m_num_timed_transitions;
     bool m_initialized;
+
+  public:
+    class Timer {
+      public:
+        Timer(const TimedTransition *pTransition);
+        const TimedTransition *m_timed_transitions;
+    };
+
 };
+
 
 
 #endif

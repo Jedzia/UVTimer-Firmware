@@ -13,21 +13,24 @@
  * modified    2020-05-16, Jedzia
  */
 /*---------------------------------------------------------*/
+#include "uvtimer.h"
+//
 #include "io.h"
 #include "states.h"
+#include "stdinout.h"
 
-// Constants
-constexpr int ButtonPressLongDuration = 1000;
-
-constexpr int ShortBlinkTime = 7;
-constexpr int LongBlinkTime = 32;
+#define STR_INDIRECTION(x) #x
+#define STR(x) STR_INDIRECTION(x)
 
 // Variables
+volatile uint32_t system_tick = 0;
 volatile int shortBlink = 0;
 volatile int longBlink = 0;
 
 volatile bool shouldBlinkShort;
 volatile bool shouldBlinkLong;
+
+Fsm::Timer timer1 = nullptr;
 
 void setupIRQ() {
     //DDRB |= B00100000;  // set pin13 to output without affecting other pins
@@ -47,6 +50,7 @@ void setupIRQ() {
 void onShortPressed();
 
 void onLongPressed();
+void timer_is_running();
 
 int main() {
     init();
@@ -70,13 +74,13 @@ int main() {
     setupIRQ();
 
     /* state 1:  led off
- * state 2:  led on
- * transition from s1 to s2 on button press
- * transition back from s2 to s1 after 3 seconds or button press
- */
-    State state_Startup(&state_startup_on_enter, nullptr, &state_startup_on_exit);
-    State state_Idle(&state_idle_on_enter, &check_other_button, &state_idle_on_exit);
-    State state_TimerRunning(&do_nothing, &check_timer_running_button, &do_nothing);
+     * state 2:  led on
+     * transition from s1 to s2 on button press
+     * transition back from s2 to s1 after 3 seconds or button press
+     */
+    State state_Startup(&state_startup_on_enter);
+    State state_Idle(nullptr, &check_other_button);
+    State state_TimerRunning(nullptr, &timer_is_running);
     State state_TimerFinished(&state_timer_finished_on_enter, &check_timer_running_button, &do_nothing);
     //State state_TimerSetup(&do_nothing, &do_nothing, NULL);
     Fsm fsm(&state_Startup);
@@ -86,21 +90,22 @@ int main() {
     fsm.add_transition(&state_Startup, &state_Idle, STARTUP_EVENT, &on_fsm_idle);
 
     fsm.add_transition(&state_Idle, &state_TimerRunning, START_TIMER_BUTTON_EVENT, &on_timer_running);
-    fsm.add_timed_transition(&state_TimerRunning, &state_Idle, 3000, &on_timer_finished);
+    timer1 = fsm.add_timed_transition(&state_TimerRunning, &state_Idle, G_TIMER_INTERVAL, &on_timer_finished);
     //fsm.add_timed_transition(&state_TimerRunning, &state_Idle, 3000, &on_timer_finished);
 
-    //fsm.add_transition(&state_TimerFinished, &state_Idle, RESET_TIMER_BUTTON_EVENT, &on_timer_reset);
+    //fsm.add_transition(&state_TimerFinished, &state_Idle, RESET_TIMER_BUTTON_EVENT,
+    // &on_timer_reset);
     fsm.add_transition(&state_TimerRunning, &state_Idle, RESET_TIMER_BUTTON_EVENT, &on_timer_cancelled);
     // }
     // initialize
     fsm.run_machine();
-
 
     //setupTransitions(fsm);
     Serial.println("Setup END");
     fsm.trigger(STARTUP_EVENT);
 #pragma clang diagnostic push
 #pragma ide diagnostic ignored "EndlessLoop"
+
     while(true) {
         // put your main code here, to run repeatedly:
         //debInput1.read();
@@ -116,7 +121,8 @@ int main() {
                shouldBlinkShort = true;
                }
 
-               //if (!debInput4.read() && debInput4.duration() > ButtonPressLong && !shouldBlinkLong)
+               //if (!debInput4.read() && debInput4.duration() > ButtonPressLong &&
+                  !shouldBlinkLong)
                if (debInput4.duration() > ButtonPressLong && debInput4.rose() && !shouldBlinkLong)
                {
                shouldBlinkLong = true;
@@ -139,23 +145,75 @@ int main() {
         // Call fsm run
         fsm.run_machine();
         //check_button();
-        delay(100);
+        delay(10);
         //Serial.println("loop");
     }
 #pragma clang diagnostic pop
+}// main
+
+void check_other_button(/*Fsm &fsm*/) {
+//    Serial.println("check_other_button()");
+    int buttonStateS2 = digitalRead(ButtonS2);
+    if(buttonStateS2 == LOW) {
+        Serial.println("button_pressed START_TIMER_BUTTON_EVENT");
+        delay(10);
+        system_tick = 0;
+        G_FSM->trigger(START_TIMER_BUTTON_EVENT);
+    }
 }
 
-void setup() {
+void check_timer_running_button(/*Fsm &fsm*/) {
+//    Serial.println("check_timer_running_button()");
+    int buttonStateS1 = digitalRead(ButtonS1);
+    if(buttonStateS1 == LOW) {
+        Serial.println("button_pressed RESET_TIMER_BUTTON_EVENT");
+        //G_FSM->reset_timed_transition(nullptr);
+        G_FSM->trigger(RESET_TIMER_BUTTON_EVENT);
+    }
+}
 
-}// setup
+void timer_is_running() {
+    //Serial.println("timer_is_running()");
+    int buttonStateS1 = digitalRead(ButtonS1);
+    if(buttonStateS1 == LOW) {
+        Serial.println("button_pressed RESET_TIMER_BUTTON_EVENT");
+        //G_FSM->reset_timed_transition(nullptr);
+        G_FSM->trigger(RESET_TIMER_BUTTON_EVENT);
+    } else {
+        if(system_tick % 100U == 0) {
+            printf("system_tick: %lu\n", system_tick);
+            //Serial.println("timer_is_running: system_tick % 10U");
+            onShortPressed();
+        }
+    }
+}
 
 void onShortPressed() {
     if(shortBlink == 0) {
+        //Serial.println("onShortPressed " STR(ShortBlinkTime));
+        unsigned long now = millis();
+        //const long long timer_ms = static_cast<long long>(timer1.m_timed_transitions->interval) - (static_cast<long long>(now) - static_cast<long long>(timer1.m_timed_transitions->start));
+        const unsigned long timer_ms_left = timer1.m_timed_transitions->interval - (now - timer1.m_timed_transitions->start);
+        int set_blink = static_cast<int>(timer_ms_left) / 1000;
+        if(set_blink < 0) {
+            set_blink = 0;
+        }
+
+        printf("[onShortPressed-%d]: now: %lu, interval: %lu, start: %lu, time left: %lu, setblink: %d\n",
+          ShortBlinkTime,
+          now,
+          timer1.m_timed_transitions->interval,
+          timer1.m_timed_transitions->start,
+          timer_ms_left,
+          set_blink);
+        //timer1.m_timed_transitions->transition,
+        //timer1.m_timed_transitions->interval;
         //if(!shouldBlinkShort)
         //shouldBlinkShort = true;
-        shortBlink = ShortBlinkTime;
+        //shortBlink = ShortBlinkTime;
+        shortBlink = set_blink;
     }
-}
+}// onShortPressed
 
 void onLongPressed() {
     if(longBlink == 0) {
@@ -165,6 +223,7 @@ void onLongPressed() {
 }
 
 ISR(TIMER1_COMPA_vect) {
+    system_tick++;
     //PORTB ^= B00100000;// toggles bit which affects pin13
     if(shouldBlinkShort) {
         bool led1State = digitalRead(LED1);
