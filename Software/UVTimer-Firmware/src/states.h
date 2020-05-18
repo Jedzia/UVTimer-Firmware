@@ -25,9 +25,7 @@
 #define START_TIMER_BUTTON_EVENT 2
 #define RESET_TIMER_BUTTON_EVENT 3
 
-Fsm* G_FSM = nullptr;
-
-int buttonState = 0;
+extern Fsm* G_FSM;
 
 void led_off();
 

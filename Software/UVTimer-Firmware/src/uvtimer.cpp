@@ -23,6 +23,7 @@
 #define STR(x) STR_INDIRECTION(x)
 
 // Variables
+Fsm* G_FSM = nullptr;
 volatile uint32_t system_tick = 0;
 volatile int shortBlink = 0;
 volatile int longBlink = 0;
@@ -249,7 +250,8 @@ ISR(TIMER1_COMPA_vect) {
         //bool led2State = digitalRead(LED2Pin);
         //digitalWrite(LED2Pin, led2State ^ 1);
         //digitalWrite(LED2Pin, !((shortBlink % 4) <= 2));
-        digitalWrite(LED2, !((shortBlink % 2U)));
+        const int every_second_tick = 2;
+        digitalWrite(LED2, static_cast<uint8_t>(((shortBlink % every_second_tick)) == 0));
         /*if(led2State)
                    {
                    shouldBlinkLong = false;
@@ -260,7 +262,8 @@ ISR(TIMER1_COMPA_vect) {
     if(longBlink > 0) {
         //bool led2State = digitalRead(LED2Pin);
         //digitalWrite(LED2Pin, led2State ^ 1);
-        digitalWrite(LED2, !((longBlink % 8) <= 4));
+        const int every_eight_tick = 8;
+        digitalWrite(LED2, static_cast<uint8_t>(longBlink % every_eight_tick > 4));
         /*if(led2State)
                    {
                    shouldBlinkLong = false;
@@ -268,5 +271,5 @@ ISR(TIMER1_COMPA_vect) {
         longBlink--;
     }
 
-    digitalWrite(LED6, !digitalRead(LED6));
+    digitalWrite(LED6, static_cast<uint8_t>(digitalRead(LED6) == 0));
 }

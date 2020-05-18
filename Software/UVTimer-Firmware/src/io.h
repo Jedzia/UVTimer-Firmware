@@ -45,19 +45,40 @@
 // (PWM+ indicates the additional PWM pins on the ATmega168.)
 
 // Buttons
+//
+//  [S1] [S2]
+//  [S3]  [S6]
+//  [S4]  [S5]
+//
+
+/* Debug, Reset Timer */
 #define ButtonS1 4// PD4, Down
+/* Debug, Start Timer */
 #define ButtonS2 7// PD7, Up
 #define ButtonS3 8// PB0, Start
+/* Debug, debounced short/long tick display */
 #define ButtonS4 6// PD6, A
 #define ButtonS5 SDA// PC4, B
 #define ButtonS6 12// PB4, Discharge
 
 // LEDs
+//
+// (1)  (2)
+//               (5)  (6)
+// (3)  (4)
+//
+
+/* Green */
 #define LED1 13// PB5
+/* Green, Blink Signal LED, User Interface */
 #define LED2 5// PD5
+/* Red, Output Relays State */
 #define LED3 10// PB2
+/* Red */
 #define LED4 9// PB1
+/* Orange, !!! Attention, shared with Serial TxD !!! */
 #define LED5 1// PD1
+/* Orange, System Tick Pulse  */
 #define LED6 SCL// PC5
 
 // Debouncers
