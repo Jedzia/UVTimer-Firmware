@@ -18,67 +18,80 @@
 
 
 #if defined(ARDUINO) && ARDUINO >= 100
-  #include <Arduino.h>
+#include <Arduino.h>
 #else
-  #include <WProgram.h>
+#include <WProgram.h>
 #endif
 
 
-struct State
-{
-  State(void (*on_enter)(), void (*on_state)(), void (*on_exit)());
-  void (*on_enter)();
-  void (*on_state)();
-  void (*on_exit)();
+struct State {
+    explicit State(void (*on_enter)(), void (*on_state)() = nullptr, void (*on_exit)() = nullptr);
+    void (*on_enter)();
+    void (*on_state)();
+    void (*on_exit)();
 };
 
 
-class Fsm
-{
-public:
-  Fsm(State* initial_state);
-  ~Fsm();
+class Fsm {
+  public:
+    Fsm(State *initial_state);
+    ~Fsm();
 
-  void add_transition(State* state_from, State* state_to, int event,
-                      void (*on_transition)());
+    void add_transition(State *state_from, State *state_to, int event, void (*on_transition)() = nullptr);
 
-  void add_timed_transition(State* state_from, State* state_to,
-                            unsigned long interval, void (*on_transition)());
+    void add_timed_transition(State *state_from, State *state_to, unsigned long interval, void (*on_transition)() = nullptr);
 
-  void check_timed_transitions();
+    /**
+     * checks the timed transitions for the current state and if timeout occured
+     * trigger appropriate transition. Timed transitions are checked and triggered in the same order as added
+     */
+    void check_timed_transitions();
 
-  void trigger(int event);
-  void run_machine();
+    /**
+     * looks for the current state's timed transitions to the target state and reset the timer
+     * @param state_to target state to reset the timed transition for. If NULL reset all current state timers
+     */
+    void reset_timed_transition(State *state_to);
 
-private:
-  struct Transition
-  {
-    State* state_from;
-    State* state_to;
-    int event;
-    void (*on_transition)();
+    /**
+     * trigger transition with the event
+     * @param event enum that defines the trigger
+     */
+    void trigger(int event);
 
-  };
-  struct TimedTransition
-  {
-    Transition transition;
-    unsigned long start;
-    unsigned long interval;
-  };
+    void run_machine();
 
-  static Transition create_transition(State* state_from, State* state_to,
-                                      int event, void (*on_transition)());
+    /**
+     * returns current state (helpful if the same handler is used to drive many similar states)
+     * @return current state
+     */
+    State *get_current_state();
 
-  void make_transition(Transition* transition);
+  private:
+    struct Transition {
+        State *state_from;
+        State *state_to;
+        int event;
+        void (*on_transition)();
+    };
+    struct TimedTransition {
+        Transition transition;
+        unsigned long start;
+        unsigned long interval;
+    };
 
-private:
-  State* m_current_state;
-  Transition* m_transitions;
-  int m_num_transitions;
+    static Transition create_transition(State *state_from, State *state_to, int event, void (*on_transition)());
 
-  TimedTransition* m_timed_transitions;
-  int m_num_timed_transitions;
-  bool m_initialized;
+    void make_transition(Transition *transition);
+
+  private:
+    State *m_current_state;
+    Transition *m_transitions;
+    int m_num_transitions;
+
+    TimedTransition *m_timed_transitions;
+    int m_num_timed_transitions;
+    bool m_initialized;
 };
 
 

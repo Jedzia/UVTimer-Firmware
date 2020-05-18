@@ -20,7 +20,7 @@ State::State(void(*on_enter)(), void(*on_state)(), void(*on_exit)()) : on_enter(
     on_exit(on_exit) {}
 
 Fsm::Fsm(State* initial_state) : m_current_state(initial_state),
-    m_transitions(NULL),
+    m_transitions(nullptr),
     m_num_transitions(0),
     m_num_timed_transitions(0),
     m_initialized(false) {}
@@ -28,12 +28,12 @@ Fsm::Fsm(State* initial_state) : m_current_state(initial_state),
 Fsm::~Fsm() {
     free(m_transitions);
     free(m_timed_transitions);
-    m_transitions = NULL;
-    m_timed_transitions = NULL;
+    m_transitions = nullptr;
+    m_timed_transitions = nullptr;
 }
 
 void Fsm::add_transition(State* state_from, State* state_to, int event, void (* on_transition)()) {
-    if(state_from == NULL || state_to == NULL) {
+    if(state_from == nullptr || state_to == nullptr) {
         return;
     }
 
@@ -44,7 +44,7 @@ void Fsm::add_transition(State* state_from, State* state_to, int event, void (* 
 }
 
 void Fsm::add_timed_transition(State* state_from, State* state_to, unsigned long interval, void (* on_transition)()) {
-    if(state_from == NULL || state_to == NULL) {
+    if(state_from == nullptr || state_to == nullptr) {
         return;
     }
 
@@ -83,6 +83,10 @@ void Fsm::trigger(int event) {
     }
 }
 
+State * Fsm::get_current_state() {
+    return m_current_state;
+}
+
 void Fsm::check_timed_transitions() {
     for(int i = 0; i < m_num_timed_transitions; ++i) {
         TimedTransition* transition = &m_timed_transitions[i];
@@ -100,17 +104,32 @@ void Fsm::check_timed_transitions() {
     }
 }
 
+void Fsm::reset_timed_transition(State* state_to) {
+    for(int i = 0; i < m_num_timed_transitions; ++i) {
+        TimedTransition* transition = &m_timed_transitions[i];
+        if(transition->transition.state_from == m_current_state) {
+            if(state_to == nullptr || (state_to != nullptr && state_to == transition->transition.state_to)) {
+                transition->start = millis();
+            }
+        }
+    }
+}
+
 void Fsm::run_machine() {
     // first run must exec first state "on_enter"
     if(!m_initialized) {
         m_initialized = true;
-        if(m_current_state->on_enter != NULL) {
+        if(m_current_state->on_enter != nullptr) {
+            //Serial.println("run_machine 1");
             m_current_state->on_enter();
+            //Serial.println("run_machine 2");
         }
     }
 
-    if(m_current_state->on_state != NULL) {
+    if(m_current_state->on_state != nullptr) {
+        //Serial.println("run_machine 3");
         m_current_state->on_state();
+        //Serial.println("run_machine 4");
     }
 
     Fsm::check_timed_transitions();
@@ -118,15 +137,17 @@ void Fsm::run_machine() {
 
 void Fsm::make_transition(Transition* transition) {
     // Execute the handlers in the correct order.
-    if(transition->state_from->on_exit != NULL) {
+    //Serial.println("make_transition");
+
+    if(transition->state_from->on_exit != nullptr) {
         transition->state_from->on_exit();
     }
 
-    if(transition->on_transition != NULL) {
+    if(transition->on_transition != nullptr) {
         transition->on_transition();
     }
 
-    if(transition->state_to->on_enter != NULL) {
+    if(transition->state_to->on_enter != nullptr) {
         transition->state_to->on_enter();
     }
 

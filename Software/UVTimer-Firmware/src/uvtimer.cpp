@@ -52,6 +52,7 @@ int main() {
     init();
 
     Serial.begin(115200);
+    Serial.println("Setup START");
     //pinMode(LED1Pin, OUTPUT);// enable LED1 output
     //pinMode(LED2Pin, OUTPUT);// enable LED1 output
     shield_setup();
@@ -73,11 +74,11 @@ int main() {
  * transition from s1 to s2 on button press
  * transition back from s2 to s1 after 3 seconds or button press
  */
-    State state_Startup(&state_startup_on_enter, &check_button, &state_startup_on_exit);
-    State state_Idle(&state_idle_on_enter, &check_button, &state_idle_on_exit);
-    State state_TimerRunning(&do_nothing, &do_nothing, &do_nothing);
-    State state_TimerFinished(&state_timer_finished_on_enter, &do_nothing, &do_nothing);
-    State state_TimerSetup(&do_nothing, &do_nothing, NULL);
+    State state_Startup(&state_startup_on_enter, nullptr, &state_startup_on_exit);
+    State state_Idle(&state_idle_on_enter, &check_other_button, &state_idle_on_exit);
+    State state_TimerRunning(&do_nothing, &check_timer_running_button, &do_nothing);
+    State state_TimerFinished(&state_timer_finished_on_enter, &check_timer_running_button, &do_nothing);
+    //State state_TimerSetup(&do_nothing, &do_nothing, NULL);
     Fsm fsm(&state_Startup);
     G_FSM = &fsm;
 
@@ -87,8 +88,9 @@ int main() {
     fsm.add_transition(&state_Idle, &state_TimerRunning, START_TIMER_BUTTON_EVENT, &on_timer_running);
     fsm.add_timed_transition(&state_TimerRunning, &state_Idle, 3000, &on_timer_finished);
     //fsm.add_timed_transition(&state_TimerRunning, &state_Idle, 3000, &on_timer_finished);
+
+    //fsm.add_transition(&state_TimerFinished, &state_Idle, RESET_TIMER_BUTTON_EVENT, &on_timer_reset);
     fsm.add_transition(&state_TimerRunning, &state_Idle, RESET_TIMER_BUTTON_EVENT, &on_timer_cancelled);
-    //fsm.add_transition(&state_Idle, &state_Idle, RESET_TIMER_BUTTON_EVENT, &on_timer_cancelled);
     // }
     // initialize
     fsm.run_machine();
@@ -136,7 +138,7 @@ int main() {
 
         // Call fsm run
         fsm.run_machine();
-        check_button();
+        //check_button();
         delay(100);
         //Serial.println("loop");
     }
