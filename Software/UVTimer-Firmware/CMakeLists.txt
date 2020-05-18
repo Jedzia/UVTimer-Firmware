@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.15)
 
 # Set the project name to your project name, my project isn't very descriptive
-project(Arduino-CMake-Template C CXX ASM)
+project(UVTimer-Firmware C CXX ASM)
 
 include(cmake/StandardProjectSettings.cmake)
 

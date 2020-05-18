@@ -22,7 +22,7 @@
 //extern void loop(void);
 
 #include <Arduino.h>
-int main() {
+/*int main() {
     init();
 
     setup();
@@ -30,4 +30,4 @@ int main() {
     while(true) {
         loop();
     }
-}
+}*/
