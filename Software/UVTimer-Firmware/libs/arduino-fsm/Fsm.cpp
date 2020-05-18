@@ -58,8 +58,9 @@ Fsm::Timer Fsm::add_timed_transition(State* state_from, State* state_to, unsigne
     m_timed_transitions = (TimedTransition *)realloc(
             m_timed_transitions, (m_num_timed_transitions + 1) * sizeof(TimedTransition));
     m_timed_transitions[m_num_timed_transitions] = timed_transition;
+    auto * address = &m_timed_transitions[m_num_timed_transitions];
     m_num_timed_transitions++;
-    return Timer(&timed_transition);
+    return Timer(address);
 } // Fsm::add_timed_transition
 
 Fsm::Transition Fsm::create_transition(State* state_from, State* state_to, int event, void (* on_transition)()) {

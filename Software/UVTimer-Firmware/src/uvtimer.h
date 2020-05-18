@@ -25,6 +25,6 @@ constexpr int ButtonPressLongDuration = 1000;
 constexpr int ShortBlinkTime = 7;
 constexpr int LongBlinkTime = 32;
 
-constexpr int G_TIMER_INTERVAL = 30000; // 30s
+constexpr unsigned long G_TIMER_INTERVAL = 60000; // 35s
 
 #endif//UVTIMER_FIRMWARE_718EEB1D6AD24205A557870217F42E61_UVTIMER_H

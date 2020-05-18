@@ -180,7 +180,7 @@ void timer_is_running() {
         //G_FSM->reset_timed_transition(nullptr);
         G_FSM->trigger(RESET_TIMER_BUTTON_EVENT);
     } else {
-        if(system_tick % 100U == 0) {
+        if(system_tick % 50U == 0) {
             printf("system_tick: %lu\n", system_tick);
             //Serial.println("timer_is_running: system_tick % 10U");
             onShortPressed();
@@ -193,17 +193,19 @@ void onShortPressed() {
         //Serial.println("onShortPressed " STR(ShortBlinkTime));
         unsigned long now = millis();
         //const long long timer_ms = static_cast<long long>(timer1.m_timed_transitions->interval) - (static_cast<long long>(now) - static_cast<long long>(timer1.m_timed_transitions->start));
-        const unsigned long timer_ms_left = timer1.m_timed_transitions->interval - (now - timer1.m_timed_transitions->start);
-        int set_blink = static_cast<int>(timer_ms_left) / 1000;
+        const unsigned long timer_ms = now - timer1.m_timed_transitions->start;
+        const unsigned long timer_ms_left = timer1.m_timed_transitions->interval + 1 - (now - timer1.m_timed_transitions->start);
+        int set_blink = static_cast<int>(timer_ms_left / 1000);
         if(set_blink < 0) {
             set_blink = 0;
         }
 
-        printf("[onShortPressed-%d]: now: %lu, interval: %lu, start: %lu, time left: %lu, setblink: %d\n",
+        printf("[onShortPressed-%d]: now: %lu, interval: %lu, start: %lu, time ms: %lu, time left: %lu, setblink: %d\n",
           ShortBlinkTime,
           now,
           timer1.m_timed_transitions->interval,
           timer1.m_timed_transitions->start,
+          timer_ms,
           timer_ms_left,
           set_blink);
         //timer1.m_timed_transitions->transition,
