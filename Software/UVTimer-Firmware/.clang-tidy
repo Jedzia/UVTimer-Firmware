@@ -1,8 +1,10 @@
 ---
 Checks:          '*,-fuchsia-*,-google-*,-zircon-*,-abseil-*,-modernize-use-trailing-return-type,-llvm-*,
+                  llvm-include-order,
                   -cppcoreguidelines-pro-type-*,
-                  llvm-include-order
+                  -cppcoreguidelines-avoid-c-arrays,
                   '
+#-cppcoreguidelines-*
 #Checks:          '*'
 WarningsAsErrors: '*'
 HeaderFilterRegex: ''
