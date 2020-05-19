@@ -82,12 +82,14 @@ constexpr uint8_t LED2 = 5; // PD5
 /* Orange, System Tick Pulse  */
 #define LED6 SCL// PC5
 
+#ifdef USE_EASYBUTTON
 //extern EasyButton debInput1;
 //extern EasyButton debInput2;
 //extern EasyButton debInput3;
 extern EasyButton debInput4;
 //extern EasyButton debInput5;
 //extern EasyButton debInput6;
+#endif
 
 void shield_setup();// xsetup
 

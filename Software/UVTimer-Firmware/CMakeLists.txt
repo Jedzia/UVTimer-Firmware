@@ -5,6 +5,8 @@ project(UVTimer-Firmware
         VERSION "0.0.1.1"
         LANGUAGES C CXX ASM)
 
+#set(CMAKE_VERBOSE_MAKEFILE ON)
+
 include(cmake/StandardProjectSettings.cmake)
 
 # check if we have a local cmake include file to setup the project.
@@ -124,7 +126,7 @@ ExternalProject_Add(
         SOURCE_DIR ${PROJECT_SOURCE_DIR}/tests
         INSTALL_COMMAND ""
         #TEST_COMMAND    "${CMAKE_CTEST_COMMAND}" --build-and-test --progress
-        TEST_COMMAND    "${CMAKE_CTEST_COMMAND}" -V --progress
+        TEST_COMMAND "${CMAKE_CTEST_COMMAND}" -V --progress
         BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR}/tests
         #PREFIX ...          # Assume this works.
         #GIT_REPOSITORY ...  # Assume this works too.

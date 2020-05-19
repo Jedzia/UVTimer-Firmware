@@ -31,8 +31,17 @@ target_link_libraries(${PROJECT_NAME}.elf PRIVATE
         # arduino_options # already imported as public with arduino::core.
         project_options
         # project_warnings # ToDo: make this work
-)
-#target_compile_definitions(${PROJECT_NAME}.elf PUBLIC USE_SERIAL)
+        )
+
+option(USE_SERIAL "Use the Serial Interface for debugging" OFF)
+if (USE_SERIAL)
+    target_compile_definitions(${PROJECT_NAME}.elf PUBLIC USE_SERIAL)
+endif ()
+option(USE_EASYBUTTON "Use the EasyButton Library" OFF)
+if (USE_EASYBUTTON)
+    target_compile_definitions(${PROJECT_NAME}.elf PUBLIC USE_EASYBUTTON)
+endif ()
+#target_compile_features(${PROJECT_NAME}.elf PUBLIC lto)
 #target_link_libraries(
 # As a placeholder in hope of a package manager
 #  ${PROJECT_NAME}.elf PRIVATE project_options project_warnings CONAN_PKG::docopt.cpp
@@ -40,7 +49,7 @@ target_link_libraries(${PROJECT_NAME}.elf PRIVATE
 if (ENABLE_UNITY)
     # Add for any project you want to apply unity builds for
     set_target_properties(${PROJECT_NAME}.elf PROPERTIES UNITY_BUILD ON)
-endif()
+endif ()
 
 # see cmake/Arduino.cmake for a description of the following macros.
 do_objcopy(${PROJECT_NAME} bin)
@@ -51,8 +60,6 @@ do_size(${PROJECT_NAME})
 add_flash_target(${PROJECT_NAME})
 add_monitor_targets()
 add_inspection_targets(${PROJECT_NAME})
-
-
 
 
 # This is an example how Arduino-IDE builds a project for an Arduino Uno.

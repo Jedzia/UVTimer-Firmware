@@ -4,6 +4,7 @@
 
 #include "io.h"
 
+#ifdef USE_EASYBUTTON
 // Debouncers
 const int DebounceInterval = 75;
 //EasyButton  debInput1  = EasyButton (ButtonS1, DebounceInverval, true, true);
@@ -12,6 +13,7 @@ const int DebounceInterval = 75;
 EasyButton debInput4 = EasyButton(ButtonS4, DebounceInterval, true, true);
 //EasyButton  debInput5  = EasyButton (ButtonS5, DebounceInverval, true, true);
 //EasyButton  debInput6  = EasyButton (ButtonS6, DebounceInverval, true, true);
+#endif
 
 void shield_setup() {
     // initialize buttons with digital input pin.
@@ -41,7 +43,8 @@ void shield_setup() {
        TCCR1B |= (1 << CS12);
        TIMSK1 |= (1 << OCIE1A);    // timer compare interrupt
        sei();*/
-}
+} // shield_setup
+
 void test_loop() {
     /*digitalWrite(LED2, !digitalRead(ButtonS1)); // turn the LED on (HIGH is On)
        digitalWrite(LED2, !digitalRead(ButtonS2));

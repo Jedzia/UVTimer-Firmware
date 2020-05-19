@@ -17,12 +17,12 @@
 //
 #include "DisplayLED.h"
 #include "io.h"
+#include "setup.h"
 #include "states.h"
 #include "stdinout.h"
-#include "setup.h"
 
 // Variables
-Fsm* G_FSM = nullptr;
+Fsm *G_FSM = nullptr;
 volatile unsigned long system_tick = 0;
 //volatile int shortBlink = 0;
 //volatile int longBlink = 0;
@@ -30,7 +30,7 @@ volatile unsigned long system_tick = 0;
 //volatile bool shouldBlinkShort;
 //volatile bool shouldBlinkLong;
 
-Fsm::Timer timer1 = nullptr;
+Fsm::Timer timer1(nullptr);
 
 DisplayLED<LED2> displayLed{};
 
@@ -66,6 +66,7 @@ int main() {
     //pinMode(LED2Pin, OUTPUT);// enable LED1 output
     shield_setup();
 
+#ifdef USE_EASYBUTTON
     debInput4.onPressed(onShortPressed);
     debInput4.onPressedFor(ButtonPressLongDuration, onLongPressed);
 
@@ -75,6 +76,7 @@ int main() {
     debInput4.begin();
     //debInput5.begin();
     //debInput6.begin();
+#endif
 
     setupIRQ();
 
@@ -116,12 +118,19 @@ int main() {
 
     while(true) {
         // put your main code here, to run repeatedly:
+#ifdef USE_EASYBUTTON
         //debInput1.read();
         //debInput2.read();
         //debInput3.read();
         debInput4.read();
         //debInput5.read();
         //debInput6.read();
+#else
+        if(digitalRead(ButtonS4) == 0 && displayLed.isNotShortBlinking()) {
+            onShortPressed();
+        }
+
+#endif // ifdef USE_EASYBUTTON
 
         /*//if (debInput4.fell() && !shouldBlinkShort)
                if (debInput4.rose() && debInput4.duration() < ButtonPressLong && !shouldBlinkShort)

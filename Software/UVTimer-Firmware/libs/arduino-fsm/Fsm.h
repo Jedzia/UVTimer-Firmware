@@ -16,25 +16,24 @@
 #ifndef FSM_H
 #define FSM_H
 
-
 #if defined(ARDUINO) && ARDUINO >= 100
-#include <Arduino.h>
+#  include <Arduino.h>
 #else
-#include <WProgram.h>
+#  include <WProgram.h>
 #endif
 
-
 struct State {
-    explicit State(void (*on_enter)(), void (*on_state)() = nullptr, void (*on_exit)() = nullptr);
+    explicit State(void(*on_enter)(), void(*on_state)() = nullptr, void(*on_exit)() = nullptr);
     void (*on_enter)();
     void (*on_state)();
     void (*on_exit)();
 };
 
-
-
 class Fsm {
-  public:
+    static constexpr size_t MAX_TRANSITIONS = 20;
+
+public:
+
     class Timer;
     Fsm(State *initial_state);
     ~Fsm();
@@ -45,13 +44,15 @@ class Fsm {
 
     /**
      * checks the timed transitions for the current state and if timeout occured
-     * trigger appropriate transition. Timed transitions are checked and triggered in the same order as added
+     * trigger appropriate transition. Timed transitions are checked and triggered in the same order
+     * as added
      */
     void check_timed_transitions();
 
     /**
      * looks for the current state's timed transitions to the target state and reset the timer
-     * @param state_to target state to reset the timed transition for. If NULL reset all current state timers
+     * @param state_to target state to reset the timed transition for. If NULL reset all current
+     * state timers
      */
     void reset_timed_transition(State *state_to);
 
@@ -69,7 +70,8 @@ class Fsm {
      */
     State *get_current_state();
 
-  private:
+private:
+
     struct Transition {
         State *state_from;
         State *state_to;
@@ -86,7 +88,6 @@ class Fsm {
 
     void make_transition(Transition *transition);
 
-  private:
     State *m_current_state;
     Transition *m_transitions;
     int m_num_transitions;
@@ -95,15 +96,14 @@ class Fsm {
     int m_num_timed_transitions;
     bool m_initialized;
 
-  public:
+public:
+
     class Timer {
-      public:
-        Timer(const TimedTransition *pTransition);
+public:
+
+        explicit Timer(const TimedTransition *pTransition);
         const TimedTransition *m_timed_transitions;
     };
-
 };
 
-
-
-#endif
+#endif // ifndef FSM_H
