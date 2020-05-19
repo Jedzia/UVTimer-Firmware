@@ -109,7 +109,11 @@ public:
         return m_longBlink == 0;
     }
 
-private:
+    [[nodiscard]] volatile int getShortBlink() const {
+        return m_shortBlink;
+    }
+
+  private:
 
     //static constexpr uint8_t pin = 0;
     volatile int m_shortBlink{};

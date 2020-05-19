@@ -25,8 +25,10 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 add_executable(display_led_test
+        Arduino.cpp
         display_led_test.cpp
         ../../src/DisplayLED.h
         ../../src/DisplayLED.cpp
         )
+target_include_directories(display_led_test PRIVATE ${CMAKE_CURRENT_SOURCE_DIR} ../../src)
 add_run_target(display_led_test ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
