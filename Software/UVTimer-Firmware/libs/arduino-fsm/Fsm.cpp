@@ -41,7 +41,6 @@ void Fsm::add_transition(State *state_from, State *state_to, int event, void (*o
         return;
     }
 
-    // ToDo: variant with fixed size transition pool to get rid of the dynamic allocation
     Transition transition = Fsm::create_transition(state_from, state_to, event, on_transition);
 #ifndef USE_HARD_FSM
     m_transitions = (Transition *)realloc(m_transitions, (m_num_transitions + 1) * sizeof(Transition));
@@ -57,7 +56,7 @@ Fsm::Timer Fsm::add_timed_transition(State *state_from, State *state_to, unsigne
 
     Transition transition = Fsm::create_transition(state_from, state_to, 0, on_transition);
 
-    TimedTransition timed_transition;
+    TimedTransition timed_transition{};
     timed_transition.transition = transition;
     timed_transition.start = 0;
     timed_transition.interval = interval;
@@ -72,7 +71,7 @@ Fsm::Timer Fsm::add_timed_transition(State *state_from, State *state_to, unsigne
 } // Fsm::add_timed_transition
 
 Fsm::Transition Fsm::create_transition(State *state_from, State *state_to, int event, void (*on_transition)()) {
-    Transition t;
+    Transition t{};
     t.state_from = state_from;
     t.state_to = state_to;
     t.event = event;
@@ -82,13 +81,13 @@ Fsm::Transition Fsm::create_transition(State *state_from, State *state_to, int e
 }
 
 void Fsm::trigger(int event) {
-    if(m_initialized) {
-        // Find the transition with the current state and given event.
-        for(int i = 0; i < m_num_transitions; ++i) {
-            if(m_transitions[i].state_from == m_current_state && m_transitions[i].event == event) {
-                Fsm::make_transition(&(m_transitions[i]));
-                return;
-            }
+    if(!m_initialized) {return;}
+
+    // Find the transition with the current state and given event.
+    for(int i = 0; i < m_num_transitions; ++i) {
+        if(m_transitions[i].state_from == m_current_state && m_transitions[i].event == event) {
+            Fsm::make_transition(&(m_transitions[i]));
+            return;
         }
     }
 }
@@ -99,15 +98,15 @@ State *Fsm::get_current_state() {
 
 void Fsm::check_timed_transitions() {
     for(int i = 0; i < m_num_timed_transitions; ++i) {
-        TimedTransition *transition = &m_timed_transitions[i];
-        if(transition->transition.state_from == m_current_state) {
-            if(transition->start == 0) {
-                transition->start = millis();
+        TimedTransition *tt = &m_timed_transitions[i];
+        if(tt->transition.state_from == m_current_state) {
+            if(tt->start == 0) {
+                tt->start = millis();
             } else {
                 unsigned long now = millis();
-                if(now - transition->start >= transition->interval) {
-                    Fsm::make_transition(&(transition->transition));
-                    transition->start = 0;
+                if(now - tt->start >= tt->interval) {
+                    Fsm::make_transition(&(tt->transition));
+                    tt->start = 0;
                 }
             }
         }
@@ -116,10 +115,10 @@ void Fsm::check_timed_transitions() {
 
 void Fsm::reset_timed_transition(State *state_to) {
     for(int i = 0; i < m_num_timed_transitions; ++i) {
-        TimedTransition *transition = &m_timed_transitions[i];
-        if(transition->transition.state_from == m_current_state) {
-            if(state_to == nullptr || (state_to != nullptr && state_to == transition->transition.state_to)) {
-                transition->start = millis();
+        TimedTransition *tt = &m_timed_transitions[i];
+        if(tt->transition.state_from == m_current_state) {
+            if(state_to == nullptr || (state_to != nullptr && state_to == tt->transition.state_to)) {
+                tt->start = millis();
             }
         }
     }
@@ -167,14 +166,15 @@ void Fsm::make_transition(Transition *transition) {
     unsigned long now = millis();
 
     for(int i = 0; i < m_num_timed_transitions; ++i) {
-        TimedTransition *ttransition = &m_timed_transitions[i];
-        if(ttransition->transition.state_from == m_current_state) {
-            ttransition->start = now;
+        TimedTransition *tt = &m_timed_transitions[i];
+        if(tt->transition.state_from == m_current_state) {
+            tt->start = now;
         }
     }
 } // Fsm::make_transition
 
 Fsm::Timer::Timer(const Fsm::TimedTransition *pTransition) : m_timed_transitions(pTransition) {}
+
 const Fsm::TimedTransition *Fsm::Timer::getTimedTransitions() const {
     return m_timed_transitions;
 }

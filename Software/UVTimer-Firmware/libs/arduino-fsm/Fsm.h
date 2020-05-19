@@ -89,8 +89,8 @@ private:
     void make_transition(Transition *transition);
 
 #ifdef USE_HARD_FSM
-    Transition m_transitions[MAX_TRANSITIONS];
-    TimedTransition m_timed_transitions[MAX_TRANSITIONS];
+    Transition m_transitions[MAX_TRANSITIONS]{};
+    TimedTransition m_timed_transitions[MAX_TRANSITIONS]{};
 #else
     Transition *m_transitions;
     TimedTransition *m_timed_transitions;
