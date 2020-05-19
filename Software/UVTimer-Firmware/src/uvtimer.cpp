@@ -25,7 +25,7 @@
 
 // Variables
 Fsm* G_FSM = nullptr;
-volatile uint32_t system_tick = 0;
+volatile unsigned long system_tick = 0;
 //volatile int shortBlink = 0;
 //volatile int longBlink = 0;
 
@@ -186,8 +186,9 @@ void timer_is_running() {
         G_FSM->trigger(RESET_TIMER_BUTTON_EVENT);
     } else {
         if(system_tick % 50U == 0) {
-            printf("system_tick: %lu\n", system_tick);
+            //printf("system_tick: %lu\n", system_tick);
             //Serial.println("timer_is_running: system_tick % 10U");
+            // indicate the actual timer value to the user
             onShortPressed();
         }
     }
@@ -202,7 +203,7 @@ void onShortPressed() {
         // long>(timer1.m_timed_transitions->start));
         const unsigned long timer_ms = now - timer1.m_timed_transitions->start;
         const unsigned long timer_ms_left = timer1.m_timed_transitions->interval + 1 - (now - timer1.m_timed_transitions->start);
-        int set_blink = static_cast<int>(timer_ms_left / 1000);
+        int set_blink = static_cast<int>(timer_ms_left / 500);
         if(set_blink < 0) {
             set_blink = 0;
         }

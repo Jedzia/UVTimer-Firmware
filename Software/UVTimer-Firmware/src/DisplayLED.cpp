@@ -6,6 +6,11 @@
 #include "io.h"
 
 void DisplayLED::display(void) {
+    // i need another one
+    // a value ... 42
+    // decreased in 4 * 10er long blinks and
+    // then 2 * short blinks
+
     //PORTB ^= B00100000;// toggles bit which affects pin13
     /*if(shouldBlinkShort) {
         bool led1State = digitalRead(LED1);
