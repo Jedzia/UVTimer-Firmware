@@ -104,3 +104,28 @@ add_subdirectory(libs)
 
 include(cmake/Arduino.cmake)
 add_subdirectory(src)
+
+
+# This compiles the sub project in tests with the system gcc and runs the target 'display_led_test_run'.
+include(ExternalProject)
+ExternalProject_Add(
+        some_external_project
+        EXCLUDE_FROM_ALL TRUE
+        #BUILD_COMMAND     "make display_led_test_run"
+        #BUILD_COMMAND ${CMAKE_MAKE_PROGRAM} clean COMMAND ${CMAKE_MAKE_PROGRAM} display_led_test_run
+        BUILD_COMMAND ${CMAKE_MAKE_PROGRAM} display_led_test_run
+        BUILD_ALWAYS TRUE
+        #STEP_TARGETS clean display_led_test_run
+        #ALWAYS TRUE
+        SOURCE_DIR ${PROJECT_SOURCE_DIR}/tests
+        INSTALL_COMMAND ""
+        BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR}/tests
+        #PREFIX ...          # Assume this works.
+        #GIT_REPOSITORY ...  # Assume this works too.
+
+        # This did the trick for me.
+        #CMAKE_ARGS -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
+        CMAKE_ARGS -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++
+        #CMAKE_ARGS -DUSE_SUPERBUILD=OFF ${EXTRA_CMAKE_ARGS}
+)
+ExternalProject_Add_Step(some_external_project display_led_test_run)
