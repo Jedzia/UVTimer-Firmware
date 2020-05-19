@@ -20,16 +20,20 @@ State::State(void(*on_enter)(), void(*on_state)(), void(*on_exit)()) : on_enter(
     on_exit(on_exit) {}
 
 Fsm::Fsm(State *initial_state) : m_current_state(initial_state),
+#ifndef USE_HARD_FSM
     m_transitions(nullptr),
+#endif
     m_num_transitions(0),
     m_num_timed_transitions(0),
     m_initialized(false) {}
 
 Fsm::~Fsm() {
+#ifndef USE_HARD_FSM
     free(m_transitions);
     free(m_timed_transitions);
     m_transitions = nullptr;
     m_timed_transitions = nullptr;
+#endif
 }
 
 void Fsm::add_transition(State *state_from, State *state_to, int event, void (*on_transition)()) {
@@ -39,7 +43,9 @@ void Fsm::add_transition(State *state_from, State *state_to, int event, void (*o
 
     // ToDo: variant with fixed size transition pool to get rid of the dynamic allocation
     Transition transition = Fsm::create_transition(state_from, state_to, event, on_transition);
+#ifndef USE_HARD_FSM
     m_transitions = (Transition *)realloc(m_transitions, (m_num_transitions + 1) * sizeof(Transition));
+#endif
     m_transitions[m_num_transitions] = transition;
     m_num_transitions++;
 }
@@ -56,8 +62,9 @@ Fsm::Timer Fsm::add_timed_transition(State *state_from, State *state_to, unsigne
     timed_transition.start = 0;
     timed_transition.interval = interval;
 
-    m_timed_transitions = (TimedTransition *)realloc(
-            m_timed_transitions, (m_num_timed_transitions + 1) * sizeof(TimedTransition));
+#ifndef USE_HARD_FSM
+    m_timed_transitions = (TimedTransition *)realloc(m_timed_transitions, (m_num_timed_transitions + 1) * sizeof(TimedTransition));
+#endif
     m_timed_transitions[m_num_timed_transitions] = timed_transition;
     auto *address = &m_timed_transitions[m_num_timed_transitions];
     m_num_timed_transitions++;

@@ -18,5 +18,10 @@ if (ENABLE_UNITY)
 	# does not work here, set_target_properties(arduino_fsm PROPERTIES UNITY_BUILD ON)
 endif()
 
+option(USE_HARD_FSM "Use non dynamic memory management in state machine" ON)
+if (USE_HARD_FSM)
+	target_compile_definitions(arduino_fsm PUBLIC USE_HARD_FSM)
+endif ()
+
 #export library
 add_library(libs::arduino_fsm ALIAS arduino_fsm)

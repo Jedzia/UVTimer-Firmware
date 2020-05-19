@@ -37,10 +37,12 @@ option(USE_SERIAL "Use the Serial Interface for debugging" OFF)
 if (USE_SERIAL)
     target_compile_definitions(${PROJECT_NAME}.elf PUBLIC USE_SERIAL)
 endif ()
+
 option(USE_EASYBUTTON "Use the EasyButton Library" OFF)
 if (USE_EASYBUTTON)
     target_compile_definitions(${PROJECT_NAME}.elf PUBLIC USE_EASYBUTTON)
 endif ()
+
 #target_compile_features(${PROJECT_NAME}.elf PUBLIC lto)
 #target_link_libraries(
 # As a placeholder in hope of a package manager

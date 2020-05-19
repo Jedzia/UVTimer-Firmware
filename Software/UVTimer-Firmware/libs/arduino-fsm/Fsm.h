@@ -35,7 +35,7 @@ class Fsm {
 public:
 
     class Timer;
-    Fsm(State *initial_state);
+    explicit Fsm(State *initial_state);
     ~Fsm();
 
     void add_transition(State *state_from, State *state_to, int event, void (*on_transition)() = nullptr);
@@ -88,11 +88,16 @@ private:
 
     void make_transition(Transition *transition);
 
-    State *m_current_state;
+#ifdef USE_HARD_FSM
+    Transition m_transitions[MAX_TRANSITIONS];
+    TimedTransition m_timed_transitions[MAX_TRANSITIONS];
+#else
     Transition *m_transitions;
+    TimedTransition *m_timed_transitions;
+#endif
+    State *m_current_state;
     int m_num_transitions;
 
-    TimedTransition *m_timed_transitions;
     int m_num_timed_transitions;
     bool m_initialized;
 
