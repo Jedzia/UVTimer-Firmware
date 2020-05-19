@@ -23,7 +23,7 @@ DisplayLED<LED2> displayLed{};
 
 void displayIterate(DisplayLED<LED2> &p) {
     static size_t it = 0;
-    cout << "Iteration[" << it << "]> sb: " << p.getShortBlink() << ", isNotBlinking: " << p.isNotShortBlinking() << ". ";
+    cout << "Iteration[" << it << "]> short blink: " << p.getShortBlink() << ", isNotBlinking: " << p.isNotShortBlinking() << ". ";
     p.display();
     it++;
 }
@@ -34,11 +34,13 @@ void displayIterate(DisplayLED<LED2> &p) {
  */
 int main() { // the main code portion of a C++ program
     cout << "Hello cheesy World" << endl;  //print Hello World on the screen
-    const int iter_max = 33;
+    const int iter_max = 32;
     displayLed.setShortBlink(iter_max);
 
     for(int i = 0; i < iter_max + 5; ++i) {
         displayIterate(displayLed);
     }
+
+    showSummary();
     return 0; // conventional
 }

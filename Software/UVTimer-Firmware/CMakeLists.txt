@@ -1,7 +1,9 @@
 cmake_minimum_required(VERSION 3.15)
 
 # Set the project name to your project name, my project isn't very descriptive
-project(UVTimer-Firmware C CXX ASM)
+project(UVTimer-Firmware
+        VERSION "0.0.1.1"
+        LANGUAGES C CXX ASM)
 
 include(cmake/StandardProjectSettings.cmake)
 
@@ -113,12 +115,16 @@ ExternalProject_Add(
         EXCLUDE_FROM_ALL TRUE
         #BUILD_COMMAND     "make display_led_test_run"
         #BUILD_COMMAND ${CMAKE_MAKE_PROGRAM} clean COMMAND ${CMAKE_MAKE_PROGRAM} display_led_test_run
-        BUILD_COMMAND ${CMAKE_MAKE_PROGRAM} display_led_test_run
+        #BUILD_COMMAND ${CMAKE_MAKE_PROGRAM} display_led_test_run test_example
+        #BUILD_COMMAND ${CMAKE_MAKE_PROGRAM} display_led_test_run
+        BUILD_COMMAND ${CMAKE_MAKE_PROGRAM} all display_led_example_run
         BUILD_ALWAYS TRUE
         #STEP_TARGETS clean display_led_test_run
         #ALWAYS TRUE
         SOURCE_DIR ${PROJECT_SOURCE_DIR}/tests
         INSTALL_COMMAND ""
+        #TEST_COMMAND    "${CMAKE_CTEST_COMMAND}" --build-and-test --progress
+        TEST_COMMAND    "${CMAKE_CTEST_COMMAND}" -V --progress
         BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR}/tests
         #PREFIX ...          # Assume this works.
         #GIT_REPOSITORY ...  # Assume this works too.

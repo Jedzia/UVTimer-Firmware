@@ -65,7 +65,7 @@ public:
                        {
                        shouldBlinkLong = false;
                        }*/
-            m_shortBlink--;
+            m_shortBlink = m_shortBlink - 1;
         }
 
         if(m_longBlink > 0) {
@@ -77,21 +77,21 @@ public:
                        {
                        shouldBlinkLong = false;
                        }*/
-            m_longBlink--;
+            m_longBlink = m_longBlink - 1;
         }
     } // DisplayLED::display
 
     /** Set the amount of short blink pulses.
      *  @param shortBlink amount of blink pulses.
      */
-    void setShortBlink(volatile int shortBlink) {
+    void setShortBlink(int shortBlink) {
         DisplayLED<TPin>::m_shortBlink = shortBlink;
     }
 
     /** Set the amount of long blink pulses.
      *  @param longBlink amount of blink pulses.
      */
-    void setLongBlink(volatile int longBlink) {
+    void setLongBlink(int longBlink) {
         DisplayLED<TPin>::m_longBlink = longBlink;
     }
 
