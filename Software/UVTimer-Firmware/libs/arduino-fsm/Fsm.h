@@ -104,9 +104,12 @@ private:
 public:
 
     class Timer {
-public:
+    public:
 
         explicit Timer(const TimedTransition *pTransition);
+      [[nodiscard]] const TimedTransition *getTimedTransitions() const;
+
+      private:
         const TimedTransition *m_timed_transitions;
     };
 };

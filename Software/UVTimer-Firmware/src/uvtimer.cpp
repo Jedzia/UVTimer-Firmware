@@ -213,8 +213,10 @@ void onShortPressed() {
         //const long long timer_ms = static_cast<long long>(timer1.m_timed_transitions->interval) -
         // (static_cast<long long>(now) - static_cast<long
         // long>(timer1.m_timed_transitions->start));
-        const unsigned long timer_ms = now - timer1.m_timed_transitions->start;
-        const unsigned long timer_ms_left = timer1.m_timed_transitions->interval + 1 - (now - timer1.m_timed_transitions->start);
+#ifdef USE_SERIAL
+        const unsigned long timer_ms = now - timer1.getTimedTransitions()->start;
+#endif
+        const unsigned long timer_ms_left = timer1.getTimedTransitions()->interval + 1 - (now - timer1.getTimedTransitions()->start);
         int set_blink = static_cast<int>(timer_ms_left / 500);
         if(set_blink < 0) {
             set_blink = 0;
@@ -245,9 +247,7 @@ void onLongPressed() {
 }
 
 ISR(TIMER1_COMPA_vect) {
-    system_tick++;
-
+    system_tick = system_tick + 1;
     displayLed.display();
-
     digitalWrite(LED6, static_cast<uint8_t>(digitalRead(LED6) == 0));
 }

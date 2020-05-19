@@ -175,3 +175,6 @@ void Fsm::make_transition(Transition *transition) {
 } // Fsm::make_transition
 
 Fsm::Timer::Timer(const Fsm::TimedTransition *pTransition) : m_timed_transitions(pTransition) {}
+const Fsm::TimedTransition *Fsm::Timer::getTimedTransitions() const {
+    return m_timed_transitions;
+}
