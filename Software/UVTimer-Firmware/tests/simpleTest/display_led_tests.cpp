@@ -37,8 +37,6 @@ TEST(Simple, fails) {
     ASSERT_EQ(42, i);
 }
 
-using namespace std;
-
 constexpr uint8_t LED2 = 5; // PD5
 
 void displayIterate(DisplayLED<LED2> &p) {
@@ -48,7 +46,14 @@ void displayIterate(DisplayLED<LED2> &p) {
     it++;
 }
 
-int mainxX() { // the main code portion of a C++ program
+TEST(DisplayLed, get_set_ShortBlink) {
+    DisplayLED<LED2> displayLed{};
+    const int iter_max = 32;
+    displayLed.setShortBlink(iter_max);
+    ASSERT_EQ(displayLed.getShortBlink(), iter_max);
+}
+
+TEST(DisplayLed, displayIterateShort) {
     DisplayLED<LED2> displayLed{};
     cout << "Hello cheesy World" << endl;  //print Hello World on the screen
     const int iter_max = 32;
@@ -58,16 +63,7 @@ int mainxX() { // the main code portion of a C++ program
         displayIterate(displayLed);
     }
     showSummary();
-    return 0; // conventional
 }
-
-TEST(DisplayLed, get_set_ShortBlink) {
-    DisplayLED<LED2> displayLed{};
-    const int iter_max = 32;
-    displayLed.setShortBlink(iter_max);
-    ASSERT_EQ(displayLed.getShortBlink(), iter_max+1);
-}
-
 class SuiteName : public ::testing::Test {
 protected:
 

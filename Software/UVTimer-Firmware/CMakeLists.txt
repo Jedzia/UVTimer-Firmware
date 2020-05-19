@@ -111,7 +111,7 @@ add_subdirectory(src)
 # This compiles the sub project in tests with the system gcc and runs the target 'display_led_test_run'.
 include(ExternalProject)
 ExternalProject_Add(
-        some_external_project
+        external_host_side_test_project
         EXCLUDE_FROM_ALL TRUE
         #BUILD_COMMAND     "make display_led_test_run"
         #BUILD_COMMAND ${CMAKE_MAKE_PROGRAM} clean COMMAND ${CMAKE_MAKE_PROGRAM} display_led_test_run
@@ -134,4 +134,4 @@ ExternalProject_Add(
         CMAKE_ARGS -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++
         #CMAKE_ARGS -DUSE_SUPERBUILD=OFF ${EXTRA_CMAKE_ARGS}
 )
-ExternalProject_Add_Step(some_external_project display_led_test_run)
+ExternalProject_Add_Step(external_host_side_test_project display_led_test_run)
