@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="MySources" pattern="file[Uno-CMake-Template]:src//*||file:libs/arduino-fsm/Fsm.cpp||file:libs/arduino-fsm/Fsm.h||file:libs/arduino-fsm/CMakeLists.txt||file[Uno-CMake-Template]:libs/EasyButton/src/*||file[Uno-CMake-Template]:libs/libarduinocore//*" />
+</component>

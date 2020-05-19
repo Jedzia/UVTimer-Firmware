@@ -79,6 +79,12 @@ add_custom_target(map # Map file with size information
         COMMAND ${SIZE} --format=berkeley "$<TARGET_FILE:${_target}.elf>" >> ${_target}.map
         DEPENDS ${_target}.elf
         COMMENT "Creating assembly listing of '${_target}.elf'")
+
+add_custom_target(nm_size # Map file with size information
+        COMMAND ${NM} --print-size --size-sort --radix=d "${_target}.elf" > ${_target}.nm.txt
+        COMMAND ${SIZE} --format=berkeley "$<TARGET_FILE:${_target}.elf>" >> ${_target}.nm.txt
+        DEPENDS ${_target}.elf
+        COMMENT "Creating size listing of '${_target}.elf'")
 endmacro(add_inspection_targets _target)
 
 

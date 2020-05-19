@@ -36,6 +36,8 @@
 /*---------------------------------------------------------*/
 #ifndef UVTIMER_FIRMWARE_7898E5E9696D489191FCE646B23B6894_STDINOUT_H
 #define UVTIMER_FIRMWARE_7898E5E9696D489191FCE646B23B6894_STDINOUT_H
+#ifdef USE_SERIAL
+
 #include <stdio.h>
 
 // no need to make an instance of this yourself
@@ -51,5 +53,5 @@ public:
 // Call the constructor in each compiled file this header is included in
 // static means the names won't collide
 static initializeSTDINOUT initializeSTDINOUT_obj;
-
+#endif
 #endif//UVTIMER_FIRMWARE_7898E5E9696D489191FCE646B23B6894_STDINOUT_H

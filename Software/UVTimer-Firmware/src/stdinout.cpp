@@ -13,6 +13,8 @@
  * modified    2020-05-18, Jedzia
  */
 /*---------------------------------------------------------*/
+#ifdef USE_SERIAL
+
 #if ARDUINO >= 100
 #  include "Arduino.h"
 #else
@@ -60,3 +62,5 @@ initializeSTDINOUT::initializeSTDINOUT() {
         setup_stdin_stdout();
     }
 }
+
+#endif

@@ -46,34 +46,47 @@ void displayIterate(DisplayLED<LED2> &p) {
     it++;
 }
 
-TEST(DisplayLed, get_set_ShortBlink) {
-    DisplayLED<LED2> displayLed{};
-    const int iter_max = 32;
-    displayLed.setShortBlink(iter_max);
-    ASSERT_EQ(displayLed.getShortBlink(), iter_max);
+void testIterate(DisplayLED<LED2> &p) {
+    static size_t it = 0;
+    p.display();
+    it++;
 }
 
-TEST(DisplayLed, displayIterateShort) {
+class DisplayLed : public ::testing::Test {
+protected:
     DisplayLED<LED2> displayLed{};
-    cout << "Hello cheesy World" << endl;  //print Hello World on the screen
-    const int iter_max = 32;
-    displayLed.setShortBlink(iter_max);
-
-    for(int i = 0; i < iter_max + 5; ++i) {
-        displayIterate(displayLed);
-    }
-    showSummary();
-}
-class SuiteName : public ::testing::Test {
-protected:
-
-protected:
 
     virtual void TearDown() {}
 
     virtual void SetUp() {}
 };
 
-TEST_F(SuiteName, TestName) {
-    ASSERT_EQ(6, 6);
+TEST_F(DisplayLed, get_set_ShortBlink) {
+    const int iter_max = 32;
+    displayLed.setShortBlink(iter_max);
+    ASSERT_EQ(displayLed.getShortBlink(), iter_max);
+}
+
+TEST_F(DisplayLed, displayIterateShort) {
+    const int iter_max = 32;
+    displayLed.setShortBlink(iter_max);
+
+    for(int i = 0; i < iter_max + 5; ++i) {
+        testIterate(displayLed);
+    }
+
+    // should blinked half the times of all iterations
+    ASSERT_EQ(setHighTimes, iter_max / 2);
+}
+
+TEST_F(DisplayLed, displayIterateLong) {
+    const int iter_max = 32;
+    displayLed.setLongBlink(iter_max);
+
+    for(int i = 0; i < iter_max + 5; ++i) {
+        testIterate(displayLed);
+    }
+
+    // should blinked half the times of all iterations
+    ASSERT_EQ(setHighTimes, iter_max / 2);
 }

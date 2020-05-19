@@ -6,6 +6,7 @@ set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
 
 set(SIZE avr-size)
+set(NM avr-nm)
 set(OBJCOPY avr-objcopy)
 set(OBJDUMP avr-objdump)
 

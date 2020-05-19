@@ -16,68 +16,34 @@
 #ifndef UVTIMER_FIRMWARE_640AB6EABDF145878B6AF525BF8D36EA_DISPLAYLED_H
 #define UVTIMER_FIRMWARE_640AB6EABDF145878B6AF525BF8D36EA_DISPLAYLED_H
 
-#include <stdint-gcc.h>
 #include <Arduino.h>
+#include <stdint-gcc.h>
+
+using WriteType = uint8_t;
 
 /** @class DisplayLED:
  *  Handles the applications only UI output element.
  *
  */
-template<uint8_t TPin>
+template<WriteType TPin>
 class DisplayLED {
 public:
+
+    static constexpr int short_blink_tick_divider = 2;
+    static constexpr int long_blink_tick_divider = 8;
 
     /** Call this periodically in a loop to
      * update the display.
      */
     void display() {
-        // i need another one
-        // a value ... 42
-        // decreased in 4 * 10er long blinks and
-        // then 2 * short blinks
-
-        //PORTB ^= B00100000;// toggles bit which affects pin13
-        /*if(shouldBlinkShort) {
-            bool led1State = digitalRead(LED1);
-            digitalWrite(LED1, led1State ^ 1);
-            if(led1State) {
-                shouldBlinkShort = false;
-            }
-           }*/
-
-        /*if(shouldBlinkLong)
-               {
-               bool led2State = digitalRead(LED2Pin);
-               digitalWrite(LED2Pin, led2State ^ 1);
-               if(led2State)
-               {
-                shouldBlinkLong = false;
-               }
-               }*/
-
-        if(m_shortBlink > 0) {
-            //bool led2State = digitalRead(LED2Pin);
-            //digitalWrite(LED2Pin, led2State ^ 1);
-            //digitalWrite(LED2Pin, !((shortBlink % 4) <= 2));
-            const int every_second_tick = 2;
-            digitalWrite(TPin, static_cast<uint8_t>(((m_shortBlink % every_second_tick)) == 0));
-            /*if(led2State)
-                       {
-                       shouldBlinkLong = false;
-                       }*/
-            m_shortBlink = m_shortBlink - 1;
-        }
-
         if(m_longBlink > 0) {
-            //bool led2State = digitalRead(LED2Pin);
-            //digitalWrite(LED2Pin, led2State ^ 1);
-            const int every_eight_tick = 8;
-            digitalWrite(TPin, static_cast<uint8_t>(m_longBlink % every_eight_tick > 4));
-            /*if(led2State)
-                       {
-                       shouldBlinkLong = false;
-                       }*/
+            digitalWrite(TPin, static_cast<WriteType>(m_longBlink % long_blink_tick_divider == 0));
             m_longBlink = m_longBlink - 1;
+        } else {
+            if(m_shortBlink > 0) {
+                digitalWrite(TPin, static_cast<WriteType>(((m_shortBlink % short_blink_tick_divider)) == 0));
+                m_shortBlink = m_shortBlink - 1;
+            }
         }
     } // DisplayLED::display
 
@@ -113,9 +79,12 @@ public:
         return m_shortBlink;
     }
 
-  private:
+    [[nodiscard]] volatile int getLongBlink() const {
+        return m_longBlink;
+    }
 
-    //static constexpr uint8_t pin = 0;
+private:
+
     volatile int m_shortBlink{};
     volatile int m_longBlink{};
 

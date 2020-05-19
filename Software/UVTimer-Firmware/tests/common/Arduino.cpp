@@ -20,11 +20,13 @@
 #include <string>
 #include <vector>
 
+int setHighTimes = 0;
+bool debugPrint = false;
+
 typedef std::map<unsigned int, unsigned int> SummaryPinMap;
 typedef std::map<unsigned int, std::vector<std::string>> SummaryPinLog;
 SummaryPinMap pin_writes{};
 SummaryPinLog pin_write_log{};
-int setHighTimes = 0;
 
 void digitalWrite(unsigned int pin, unsigned int val) {
     if(val == 1) {
@@ -34,7 +36,10 @@ void digitalWrite(unsigned int pin, unsigned int val) {
     std::stringstream msg;
     msg << "digitalWrite(Pin: " << pin << " val: " << val << ")";
     auto msg_str = msg.str();
-    std::cout << msg_str << "\n";
+    if(debugPrint) {
+        std::cout << msg_str << "\n";
+    }
+
     auto stored_value = pin_writes.find(pin);
     if(stored_value != pin_writes.end()) {
         stored_value->second++;
@@ -47,20 +52,22 @@ void digitalWrite(unsigned int pin, unsigned int val) {
     }
 } // digitalWrite
 
-void showSummary() {
+void showSummary(bool withLog) {
     std::cout << "\n\n=========== digitalWrite Pin Usage Summary ===========\n\n";
     std::cout << "Pin set " << setHighTimes << " times to High.\n";
 
-    for(SummaryPinMap::iterator itr = pin_writes.begin(); itr != pin_writes.end(); ++itr) {
-        std::cout << "\tpin " << itr->first << "\t accessed\t" << itr->second << " times\n";
+    for(auto &pin_write : pin_writes) {
+        std::cout << "\tpin " << pin_write.first << "\t accessed\t" << pin_write.second << " times\n";
     }
     std::cout << "\n=========== digitalWrite Pin Usage Log ===========\n\n";
 
-    /*for(SummaryPinLog::iterator itr = pin_write_log.begin(); itr != pin_write_log.end(); ++itr) {
-        for(auto &msg : itr->second)  // access by reference to avoid copying
-        {
-            //std::cout << "\tpin " << msg << "\t accessed\t" << itr->second << " times\n";
-            std::cout << "\tMsg: " << msg << "\n";
+    if(withLog) {
+        for(auto &itr : pin_write_log) {
+            for(auto &msg : itr.second) // access by reference to avoid copying
+            {
+                //std::cout << "\tpin " << msg << "\t accessed\t" << itr->second << " times\n";
+                std::cout << "\tMsg: " << msg << "\n";
+            }
         }
-       }*/
-}
+    }
+} // showSummary

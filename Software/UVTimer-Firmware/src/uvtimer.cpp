@@ -19,9 +19,7 @@
 #include "io.h"
 #include "states.h"
 #include "stdinout.h"
-
-#define STR_INDIRECTION(x) # x
-#define STR(x) STR_INDIRECTION(x)
+#include "setup.h"
 
 // Variables
 Fsm* G_FSM = nullptr;
@@ -60,8 +58,10 @@ void timer_is_running();
 int main() {
     init();
 
+#ifdef USE_SERIAL
     Serial.begin(115200);
-    Serial.println("Setup START");
+#endif
+    println("Setup START");
     //pinMode(LED1Pin, OUTPUT);// enable LED1 output
     //pinMode(LED2Pin, OUTPUT);// enable LED1 output
     shield_setup();
@@ -106,10 +106,13 @@ int main() {
     fsm.run_machine();
 
     //setupTransitions(fsm);
-    Serial.println("Setup END");
+    println("Setup END");
     fsm.trigger(STARTUP_EVENT);
-#pragma clang diagnostic push
-#pragma ide diagnostic ignored "EndlessLoop"
+
+#pragma GCC diagnostic push
+#if defined(__CLION_IDE__)
+#  pragma ide diagnostic ignored "EndlessLoop"
+#endif
 
     while(true) {
         // put your main code here, to run repeatedly:
@@ -151,16 +154,16 @@ int main() {
         fsm.run_machine();
         //check_button();
         delay(10);
-        //Serial.println("loop");
+        //println("loop");
     }
-#pragma clang diagnostic pop
+#pragma GCC diagnostic pop
 }// main
 
 void check_other_button(/*Fsm &fsm*/) {
-//    Serial.println("check_other_button()");
+//    println("check_other_button()");
     int buttonStateS2 = digitalRead(ButtonS2);
     if(buttonStateS2 == LOW) {
-        Serial.println("button_pressed START_TIMER_BUTTON_EVENT");
+        println("button_pressed START_TIMER_BUTTON_EVENT");
         delay(10);
         system_tick = 0;
         G_FSM->trigger(START_TIMER_BUTTON_EVENT);
@@ -168,26 +171,26 @@ void check_other_button(/*Fsm &fsm*/) {
 }
 
 void check_timer_running_button(/*Fsm &fsm*/) {
-//    Serial.println("check_timer_running_button()");
+//    println("check_timer_running_button()");
     int buttonStateS1 = digitalRead(ButtonS1);
     if(buttonStateS1 == LOW) {
-        Serial.println("button_pressed RESET_TIMER_BUTTON_EVENT");
+        println("button_pressed RESET_TIMER_BUTTON_EVENT");
         //G_FSM->reset_timed_transition(nullptr);
         G_FSM->trigger(RESET_TIMER_BUTTON_EVENT);
     }
 }
 
 void timer_is_running() {
-    //Serial.println("timer_is_running()");
+    //println("timer_is_running()");
     int buttonStateS1 = digitalRead(ButtonS1);
     if(buttonStateS1 == LOW) {
-        Serial.println("button_pressed RESET_TIMER_BUTTON_EVENT");
+        println("button_pressed RESET_TIMER_BUTTON_EVENT");
         //G_FSM->reset_timed_transition(nullptr);
         G_FSM->trigger(RESET_TIMER_BUTTON_EVENT);
     } else {
         if(system_tick % 50U == 0) {
             //printf("system_tick: %lu\n", system_tick);
-            //Serial.println("timer_is_running: system_tick % 10U");
+            //println("timer_is_running: system_tick % 10U");
             // indicate the actual timer value to the user
             onShortPressed();
         }
@@ -196,7 +199,7 @@ void timer_is_running() {
 
 void onShortPressed() {
     if(displayLed.isNotShortBlinking()) {
-        //Serial.println("onShortPressed " STR(ShortBlinkTime));
+        //println("onShortPressed " STR(ShortBlinkTime));
         unsigned long now = millis();
         //const long long timer_ms = static_cast<long long>(timer1.m_timed_transitions->interval) -
         // (static_cast<long long>(now) - static_cast<long

@@ -23,7 +23,7 @@ set(SRC_FILES
         stdinout.h
         uvtimer.cpp
         uvtimer.h
-        )
+        setup.h)
 add_executable(${PROJECT_NAME}.elf ${SRC_FILES})
 target_link_libraries(${PROJECT_NAME}.elf PRIVATE
         arduino::core
@@ -32,6 +32,7 @@ target_link_libraries(${PROJECT_NAME}.elf PRIVATE
         project_options
         # project_warnings # ToDo: make this work
 )
+#target_compile_definitions(${PROJECT_NAME}.elf PUBLIC USE_SERIAL)
 #target_link_libraries(
 # As a placeholder in hope of a package manager
 #  ${PROJECT_NAME}.elf PRIVATE project_options project_warnings CONAN_PKG::docopt.cpp
