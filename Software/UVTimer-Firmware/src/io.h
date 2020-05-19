@@ -71,7 +71,8 @@
 /* Green */
 #define LED1 13// PB5
 /* Green, Blink Signal LED, User Interface */
-#define LED2 5// PD5
+//#define LED2 5// PD5
+constexpr uint8_t LED2 = 5; // PD5
 /* Red, Output Relays State */
 #define LED3 10// PB2
 /* Red */

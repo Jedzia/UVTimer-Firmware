@@ -34,7 +34,7 @@ volatile unsigned long system_tick = 0;
 
 Fsm::Timer timer1 = nullptr;
 
-DisplayLED displayLed{};
+DisplayLED<LED2> displayLed{};
 
 void setupIRQ() {
     //DDRB |= B00100000;  // set pin13 to output without affecting other pins
