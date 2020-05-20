@@ -1,4 +1,77 @@
-# Yet another Arduino CMake Template #    
+# UV exposure unit, Timer replacement, a.k.a evolution #
+
+|                     The Interface                          |                      The Aparatus                       |
+| ---------------------------------------------------------- | ------------------------------------------------------- |
+| ![](doc/Media/timer2.png)                         | ![](doc/Media/uv-belichtungsgerate-zweiseitig-2.png)             |
+| https://www.reichelt.de/uv-exposure-unit-usable-area-240x365mm-uv-belichter-2-p22191.html?GROUPID=7789&&r=1  | https://www.tme.eu/de/details/bel14017/belichtungsgerate/isel/  |
+
+> **Placeholder** IMAGE of the old electronic black box.
+
+The control units of these things, especially older ones, tend to go down in "sound and smoke". This is 
+due to the fact that a direct power supply from the network via capacitor and z-diode is used.
+
+Here I am trying to reconstruct a reasonable human-machine interface based on the given holes, and not being an asshole, 
+before you say it.
+
+This is a pre-release version and differs from the steps described below:
+* Even if it is no longer a problem today and the flash memory is good-natured, there is a secondary project 
+  that enables certain parts of the code to be tested for the microcontroller on the host platform. You are a
+  lot faster and the vizualization is better. Believe me:)
+  Point your CMake aware IDE/brain to directory **tests/**. This will utilize the root project and turn it into a
+  data-grave that features the convenience you are used to from your desktop computer (simply because it is your desktop
+  computer, we are using to catch data).
+* The same can be reached via the build-target *external_host_side_test_project*, In the absence of a better name.
+* Don't go to far, but if you are allowed to? ... there are the targets:
+  - map 
+  - listing
+  - monitor
+  - nm_size
+
+  who will do you a good job in micro-managing low-level hardware care for your beloved MCU.
+
+## The Replacement ##
+The requirements are simple:
+A push button that also functions as the Indication ... LED or SHOCKER ... there is no more physical place for the UI .....
+
+The test case is also simple:
+Press the button short and the timer runs. Indicating **Morse** like with
+* long blinks for 10 seconds, as in 120 seconds, the 12 or in 240 second the 24 blinks, and
+* short blinks for the lowest decimal place, as in 5 Morse blinks for the 5 seconds part in "x5 seconds".
+
+## Life is short ##
+This is part of a hardware project and may be erased from existance, to be united with its open sauce hardware cousin in one
+repository. Also keep in mind, that this kind of project using direct powerline connections is no joke. You shouldnt be drunk
+or horny. Excuse me, you should be aware, that you can die immediately from the mains voltage.
+
+## Rabbithole, Gloryhole for @hackbyte ##
+I just wanted to write something quickly. That ended up in analysis. In stinginess. And then immediately 
+in a hard bout of overview in a diagram!
+The only strange thing is that we ended up with the assembler again. I mean the one we actually wanted to abstract away.
+
+    00002060 00000240 T __vector_11
+    00000552 00000256 t _ZN3Fsm11run_machineEv
+    00003754 00000292 T free
+    00003454 00000300 T malloc
+    00003036 00000400 T realloc
+    00002310 00000646 T main
+       text	   data	    bss	    dec	    hex	filename
+       4160	      6	     27	   4193	   1061	/mumu/devel/Elektronik/Arduino/ATtiny/UVTimer/Software/UVTimer-Firmware/cmake-build-debug-avr-gcc/src/uvtimer.elf
+
+
+
+Is not something you ignore;)
+You write a second version with: 
+
+    00002196 00000718 T main
+    ....
+       text	   data	    bss	    dec	    hex	filename
+       2998	      0	     23	   3021	    bcd	/mumu/devel/Elektronik/Arduino/ATtiny/UVTimer/Software/UVTimer-Firmware/cmake-build-debug-avr-gcc/src/uvtimer.elf
+
+This is at least under kilobyte code. Excuse me for disturbing, hackbyte. At least it is an alternative to Vollidioten in Hamburg or
+Tristiness .... fuck, Wikipedia hasn't that word, too. I meant "Langweeeeeeeeeeiiiiiiiiilig".
+
+------------------------------------------------------------------------------------------------------------------------
+The following is based on "Yet another Arduino CMake Template" at https://github.com/Jedzia/Arduino-CMake-Template.    
 
 I have my Arduino-IDE, why would i use this?
 - A **one second build-time** for a simple blink project like this? (Including the Arduino Library!).
