@@ -21,6 +21,8 @@
 #include <vector>
 
 int setHighTimes = 0;
+int pinTransitions = 0;
+unsigned int lastPinState = 0;
 bool debugPrint = false;
 
 typedef std::map<unsigned int, unsigned int> SummaryPinMap;
@@ -50,11 +52,17 @@ void digitalWrite(unsigned int pin, unsigned int val) {
         log.push_back(msg_str);
         pin_write_log.insert(std::pair<unsigned int, std::vector<std::string>>(pin, log));
     }
+
+    if(val != lastPinState) {
+        pinTransitions++;
+    }
+    lastPinState = val;
 } // digitalWrite
 
 void showSummary(bool withLog) {
     std::cout << "\n\n=========== digitalWrite Pin Usage Summary ===========\n\n";
     std::cout << "Pin set " << setHighTimes << " times to High.\n";
+    std::cout << "Pin transitions occurred " << pinTransitions << " times.\n";
 
     for(auto &pin_write : pin_writes) {
         std::cout << "\tpin " << pin_write.first << "\t accessed\t" << pin_write.second << " times\n";
