@@ -54,9 +54,9 @@ int main() { // the main code portion of a C++ program
     showSummary();
 #else
     cout << "displayLed LongBlink with " << iter_max << " iterations\n";  //print Hello World on the screen
-    displayLed.setLongBlink(iter_max);
+    displayLed.setLongBlink(iter_max - 1);
 
-    for(int i = 0; i < iter_max*2 + 5; ++i) {
+    for(int i = 0; i < iter_max*3; ++i) {
         displayIterateLong(displayLed);
     }
     showSummary();

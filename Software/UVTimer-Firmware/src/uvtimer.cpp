@@ -127,7 +127,8 @@ int main() {
         //debInput6.read();
 #else
         if(digitalRead(ButtonS4) == 0 && displayLed.isNotShortBlinking()) {
-            onShortPressed();
+            //onShortPressed();
+            onLongPressed();
         }
 
 #endif // ifdef USE_EASYBUTTON
