@@ -23,7 +23,7 @@
 
 // Variables
 Fsm *G_FSM = nullptr;
-volatile unsigned long system_tick = 0;
+volatile uint32_t system_tick = 0;
 //volatile int shortBlink = 0;
 //volatile int longBlink = 0;
 

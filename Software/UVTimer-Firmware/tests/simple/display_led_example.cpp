@@ -44,7 +44,7 @@ int main() { // the main code portion of a C++ program
 
     const int iter_max = 32*2;
 
-#if 1
+#if 0
     cout << "displayLed ShortBlink with " << iter_max << " iterations\n";  //print Hello World on the screen
     displayLed.setShortBlink(iter_max);
 

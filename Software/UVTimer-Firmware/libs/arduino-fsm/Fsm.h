@@ -60,7 +60,7 @@ public:
      * trigger transition with the event
      * @param event enum that defines the trigger
      */
-    void trigger(int event);
+    void __attribute__ ((noinline)) trigger(int event);
 
     void run_machine();
 
