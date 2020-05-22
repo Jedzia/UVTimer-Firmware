@@ -93,8 +93,6 @@ extern EasyButton debInput4;
 
 void shield_setup();// xsetup
 
-void test_loop();
-
 // test function of LEDs
 /*ISR(TIMER1_COMPA_vect) {
    //PORTB ^= B00100000;// toggles bit which affects pin13

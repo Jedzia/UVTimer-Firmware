@@ -16,21 +16,34 @@ EasyButton debInput4 = EasyButton(ButtonS4, DebounceInterval, true, true);
 #endif
 
 void shield_setup() {
+#ifndef DIRECT_WRITE
     // initialize buttons with digital input pin.
     pinMode(ButtonS1, INPUT_PULLUP);
     pinMode(ButtonS2, INPUT_PULLUP);
-    pinMode(ButtonS3, INPUT_PULLUP);
+    //pinMode(ButtonS3, INPUT_PULLUP);
     pinMode(ButtonS4, INPUT_PULLUP);
-    pinMode(ButtonS5, INPUT_PULLUP);
-    pinMode(ButtonS6, INPUT_PULLUP);
+    //pinMode(ButtonS5, INPUT_PULLUP);
+    //pinMode(ButtonS6, INPUT_PULLUP);
 
     // initialize digital pin LED1 as an output.
     pinMode(LED1, OUTPUT);
     pinMode(LED2, OUTPUT);
     pinMode(LED3, OUTPUT);
-    pinMode(LED4, OUTPUT);
-    pinMode(LED5, OUTPUT);
+    //pinMode(LED4, OUTPUT);
+    //pinMode(LED5, OUTPUT);
     pinMode(LED6, OUTPUT);
+#else
+    PORTD = (1<<PD4)|(1<<PD7)|(1<<PD6);
+    DDRD = (1<<DDD5);
+
+    PORTC = 0;
+    DDRC = (1<<DDC5);
+
+    PORTB = 0;
+    DDRB = (1<<DDB5)  | (1<<DDB2);
+
+    _NOP();
+#endif
 
     /*// setup TIMER1 COMPARE
        cli();
@@ -44,16 +57,3 @@ void shield_setup() {
        TIMSK1 |= (1 << OCIE1A);    // timer compare interrupt
        sei();*/
 } // shield_setup
-
-void test_loop() {
-    /*digitalWrite(LED2, !digitalRead(ButtonS1)); // turn the LED on (HIGH is On)
-       digitalWrite(LED2, !digitalRead(ButtonS2));
-       digitalWrite(LED3, !digitalRead(ButtonS3));
-       digitalWrite(LED4, !digitalRead(ButtonS4));
-       digitalWrite(LED5, !digitalRead(ButtonS5));
-       digitalWrite(LED6, !digitalRead(ButtonS6));*/
-
-    if(!digitalRead(ButtonS1)) {
-        digitalWrite(LED1, true);// turn the LED on (true is On)
-    }
-}
