@@ -24,11 +24,6 @@
 // Variables
 Fsm *G_FSM = nullptr;
 volatile uint32_t system_tick = 0;
-//volatile int shortBlink = 0;
-//volatile int longBlink = 0;
-
-//volatile bool shouldBlinkShort;
-//volatile bool shouldBlinkLong;
 
 Fsm::Timer timer1(nullptr);
 

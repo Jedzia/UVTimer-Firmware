@@ -29,6 +29,7 @@ template<WriteType TPin>
 class DisplayLED {
 public:
 
+    using PrecissionType = uint32_t;
     static constexpr int short_blink_tick_divider = 2;
     static constexpr int long_blink_tick_divider = 8;
 
@@ -86,8 +87,8 @@ public:
 
 private:
 
-    volatile int m_shortBlink{};
-    volatile int m_longBlink{};
+    volatile PrecissionType m_shortBlink{};
+    volatile PrecissionType m_longBlink{};
 
     volatile bool m_shouldBlinkShort{};
     volatile bool m_shouldBlinkLong{};
