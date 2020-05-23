@@ -21,9 +21,6 @@
 #include "states.h"
 #include "stdinout.h"
 
-// Variables
-volatile uint32_t system_tick = 0;
-
 #ifdef USE_LOCAL_FSM
 struct instance_data {
     uint32_t duration = 0;
@@ -35,8 +32,8 @@ typedef enum {
     STATE_IDLE,
     STATE_TIMER_RUNNING, NUM_STATES
 } state_t;
-typedef struct instance_data instance_data_t;
-typedef state_t state_func_t(instance_data_t *data);
+using instance_data_t = struct instance_data;
+using state_func_t = state_t(instance_data_t *);
 
 state_t do_state_Startup(instance_data_t *data);
 
@@ -82,15 +79,25 @@ state_t do_state_TimerRunning(instance_data_t *data) {
         on_timer_reset();
         return STATE_IDLE;
     }
-    if (data->duration <  millis()) {
+
+    if(data->duration < millis()) {
         on_timer_finished();
         return STATE_IDLE;
     }
 
+    if(data->m_displayLed->isNotShortBlinking()) {
+        auto remaining = (data->duration - millis()) / 1000;
+        data->m_displayLed->setShortBlink(remaining);
+#  ifdef USE_SERIAL
+        printf("setShortBlink %lu", remaining);
+#  endif
+    }
+
     return STATE_TIMER_RUNNING;
-}
+} // do_state_TimerRunning
 
 #else // ifdef USE_LOCAL_FSM
+volatile uint32_t system_tick = 0;
 Fsm *G_FSM = nullptr;
 Fsm::Timer timer1(nullptr);
 #endif // ifdef USE_LOCAL_FSM
@@ -244,6 +251,8 @@ int main() {
 #pragma GCC diagnostic pop
 }// main
 
+#ifdef USE_LOCAL_FSM
+#else
 void check_other_button(/*Fsm &fsm*/) {
 //    println("check_other_button()");
     int buttonStateS2 = digitalRead(ButtonS2);
@@ -251,12 +260,11 @@ void check_other_button(/*Fsm &fsm*/) {
         println("button_pressed START_TIMER_BUTTON_EVENT");
         delay(10);
         system_tick = 0;
-#ifdef USE_LOCAL_FSM
-#else
         G_FSM->trigger(START_TIMER_BUTTON_EVENT);
-#endif
     }
 }
+
+#endif // ifdef USE_LOCAL_FSM
 
 void check_timer_running_button(/*Fsm &fsm*/) {
 //    println("check_timer_running_button()");
@@ -271,16 +279,15 @@ void check_timer_running_button(/*Fsm &fsm*/) {
     }
 }
 
+#ifdef USE_LOCAL_FSM
+#else
 void timer_is_running() {
     //println("timer_is_running()");
     int buttonStateS1 = digitalRead(ButtonS1);
     if(buttonStateS1 == LOW) {
         println("button_pressed RESET_TIMER_BUTTON_EVENT");
         //G_FSM->reset_timed_transition(nullptr);
-#ifdef USE_LOCAL_FSM
-#else
         G_FSM->trigger(RESET_TIMER_BUTTON_EVENT);
-#endif
     } else {
         if(system_tick % 50U == 0) {
             //printf("system_tick: %lu\n", system_tick);
@@ -291,16 +298,18 @@ void timer_is_running() {
     }
 } // timer_is_running
 
+#endif // ifdef USE_LOCAL_FSM
+
 void onShortPressed() {
     if(displayLed.isNotShortBlinking()) {
+#ifdef USE_LOCAL_FSM
+        int set_blink = 16;
+#else
         //println("onShortPressed " STR(ShortBlinkTime));
         unsigned long now = millis();
         //const long long timer_ms = static_cast<long long>(timer1.m_timed_transitions->interval) -
         // (static_cast<long long>(now) - static_cast<long
         // long>(timer1.m_timed_transitions->start));
-#ifdef USE_LOCAL_FSM
-        int set_blink = 16;
-#else
 #  ifdef USE_SERIAL
         const unsigned long timer_ms = now - timer1.getTimedTransitions()->start;
 #  endif
@@ -336,7 +345,10 @@ void onLongPressed() {
 }
 
 ISR(TIMER1_COMPA_vect) {
+#ifdef USE_LOCAL_FSM
+#else
     system_tick = system_tick + 1;
+#endif
     displayLed.display();
     digitalWrite(LED6, static_cast<uint8_t>(digitalRead(LED6) == 0));
 }

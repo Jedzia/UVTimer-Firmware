@@ -29,7 +29,7 @@ template<WriteType TPin>
 class DisplayLED {
 public:
 
-    using PrecissionType = uint32_t;
+    using PrecissionType = uint16_t;
     static constexpr int short_blink_tick_divider = 2;
     static constexpr int long_blink_tick_divider = 8;
 
@@ -57,14 +57,14 @@ public:
     /** Set the amount of short blink pulses.
      *  @param shortBlink amount of blink pulses.
      */
-    void setShortBlink(int shortBlink) {
+    void setShortBlink(PrecissionType shortBlink) {
         DisplayLED<TPin>::m_shortBlink = shortBlink;
     }
 
     /** Set the amount of long blink pulses.
      *  @param longBlink amount of blink pulses.
      */
-    void setLongBlink(int longBlink) {
+    void setLongBlink(PrecissionType longBlink) {
         DisplayLED<TPin>::m_longBlink = longBlink;
     }
 
@@ -82,11 +82,11 @@ public:
         return m_longBlink == 0;
     }
 
-    [[nodiscard]] volatile int getShortBlink() const {
+    [[nodiscard]] volatile PrecissionType getShortBlink() const {
         return m_shortBlink;
     }
 
-    [[nodiscard]] volatile int getLongBlink() const {
+    [[nodiscard]] volatile PrecissionType getLongBlink() const {
         return m_longBlink;
     }
 
