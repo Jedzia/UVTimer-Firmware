@@ -3,6 +3,7 @@
 //
 
 #include "io.h"
+//#define DIRECT_WRITE
 
 #ifdef USE_EASYBUTTON
 // Debouncers

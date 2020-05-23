@@ -43,6 +43,11 @@ if (USE_EASYBUTTON)
     target_compile_definitions(${PROJECT_NAME}.elf PUBLIC USE_EASYBUTTON)
 endif ()
 
+option(USE_LOCAL_FSM "Use local state machine implementation" ON)
+if (USE_LOCAL_FSM)
+    target_compile_definitions(${PROJECT_NAME}.elf PUBLIC USE_LOCAL_FSM)
+endif ()
+
 #target_compile_features(${PROJECT_NAME}.elf PUBLIC lto)
 #target_link_libraries(
 # As a placeholder in hope of a package manager
