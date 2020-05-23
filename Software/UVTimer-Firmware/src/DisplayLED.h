@@ -38,13 +38,18 @@ public:
      */
     void display() {
         if(m_longBlink > 0) {
-            //digitalWrite(TPin, static_cast<WriteType>(m_longBlink % long_blink_tick_divider == 0));
+            //digitalWrite(TPin, static_cast<WriteType>(m_longBlink % long_blink_tick_divider ==
+            // 0));
             digitalWrite(TPin, static_cast<WriteType>(((m_longBlink - 1) / long_blink_tick_divider) % 2 == 1));
             m_longBlink = m_longBlink - 1;
         } else {
-            if(m_shortBlink > 0) {
-                digitalWrite(TPin, static_cast<WriteType>((((m_shortBlink - 1) % short_blink_tick_divider)) == 1));
-                m_shortBlink = m_shortBlink - 1;
+            if(m_waitTime > 0) {
+                m_waitTime = m_waitTime - 1;
+            } else {
+                if(m_shortBlink > 0) {
+                    digitalWrite(TPin, static_cast<WriteType>((((m_shortBlink - 1) % short_blink_tick_divider)) == 1));
+                    m_shortBlink = m_shortBlink - 1;
+                }
             }
         }
     } // DisplayLED::display
@@ -89,6 +94,7 @@ private:
 
     volatile PrecissionType m_shortBlink{};
     volatile PrecissionType m_longBlink{};
+    volatile PrecissionType m_waitTime{};
 
     volatile bool m_shouldBlinkShort{};
     volatile bool m_shouldBlinkLong{};

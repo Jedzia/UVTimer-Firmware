@@ -22,9 +22,9 @@
 #include "stdinout.h"
 
 // Variables
-Fsm *G_FSM = nullptr;
 volatile uint32_t system_tick = 0;
 
+Fsm *G_FSM = nullptr;
 Fsm::Timer timer1(nullptr);
 
 DisplayLED<LED2> displayLed{};
@@ -103,8 +103,9 @@ int main() {
     fsm.run_machine();
 
     //setupTransitions(fsm);
-    println("Setup END");
     fsm.trigger(STARTUP_EVENT);
+
+    println("Setup END");
 
 #pragma GCC diagnostic push
 #if defined(__CLION_IDE__)

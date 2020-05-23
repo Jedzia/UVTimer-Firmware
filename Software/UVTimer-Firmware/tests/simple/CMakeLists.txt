@@ -32,3 +32,6 @@ add_executable(display_led_example
         )
 target_include_directories(display_led_example PRIVATE ${CMAKE_CURRENT_SOURCE_DIR} ../common ../../src)
 add_run_target(display_led_example ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
+
+# State Machine R&D
+add_executable(state_machine_example state_machine.cpp)
